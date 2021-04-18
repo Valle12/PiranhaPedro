@@ -82,15 +82,14 @@ public class Frame extends JPanel implements MouseListener {
 		board[nextI][nextJ] = 3;
 	}
 
-	public void createLand(int pedroI, int pedroJ, int nextI, int nextJ) {
+	public boolean createLand(int pedroI, int pedroJ, int nextI, int nextJ) {
 		if (stones[(currentCard ? 1 : 0)]-- > 0) {
 			changePedro(pedroI, pedroJ, nextI, nextJ);
+			return true;
 		} else {
-			if (currentCard) {
-				gameOver(false);
-			} else {
-				gameOver(true);
-			}
+			choosePiranha();
+			resetBoard();
+			return false;
 		}
 	}
 	
@@ -116,12 +115,17 @@ public class Frame extends JPanel implements MouseListener {
 	}
 
 	public void resetBoard() {
-		playCards[0] = -1;
-		playCards[1] = -1;
-		playCards[2] = -1;
+		resetLowerAndUpperCards();
 		stones[0] = getRemainingStones(true);
 		stones[1] = getRemainingStones(false);
 		repaint();
+	}
+
+	private void resetLowerAndUpperCards() {
+		for (int i = 0; i < 12; i++) {
+			lowerCards[i] = false;
+			upperCards[i] = false;
+		}
 	}
 
 	public void resetGame() {
@@ -131,10 +135,7 @@ public class Frame extends JPanel implements MouseListener {
 			}
 		}
 		predefineBoard();
-		for (int i = 0; i < 12; i++) {
-			lowerCards[i] = false;
-			upperCards[i] = false;
-		}
+		resetLowerAndUpperCards();
 		playCards[0] = -1;
 		playCards[1] = -1;
 		playCards[2] = -1;

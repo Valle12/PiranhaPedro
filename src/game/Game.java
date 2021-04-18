@@ -97,9 +97,12 @@ public class Game extends Thread{
 						fp.choosePiranha();
 						return false;
 					} else if (board[nextI][nextJ] == 0) {
-						fp.createLand(pedroI, pedroJ, nextI, nextJ);
-						pedroJ = nextJ;
-						nextJ = pedroJ;
+						if (fp.createLand(pedroI, pedroJ, nextI, nextJ)) {
+							pedroJ = nextJ;
+							nextJ = pedroJ;
+						} else {
+							return false;
+						}
 					}
 				} else {
 					fp.choosePiranha();
@@ -115,9 +118,12 @@ public class Game extends Thread{
 						fp.choosePiranha();
 						return false;
 					} else if (board[nextI][nextJ] == 0) {
-						fp.createLand(pedroI, pedroJ, nextI, nextJ);
-						pedroI = nextI;
-						nextI = pedroI;
+						if (fp.createLand(pedroI, pedroJ, nextI, nextJ)) {
+							pedroI = nextI;
+							nextI = pedroI;
+						} else {
+							return false;
+						}
 					}
 				} else {
 					fp.choosePiranha();
