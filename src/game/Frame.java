@@ -115,9 +115,9 @@ public class Frame extends JPanel implements MouseListener {
 	}
 
 	public void resetBoard() {
-		resetLowerAndUpperCards();
 		stones[0] = getRemainingStones(true);
 		stones[1] = getRemainingStones(false);
+		resetLowerAndUpperCards();
 		repaint();
 	}
 
