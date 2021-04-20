@@ -1,4 +1,5 @@
 package net.messages;
 
-public class MessageTypes {
+public enum MessageTypes {
+    CONNECT
 }
