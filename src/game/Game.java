@@ -1,5 +1,7 @@
 package game;
 
+import net.server.Server;
+
 import java.awt.Insets;
 
 import javax.swing.JFrame;
@@ -10,6 +12,7 @@ public class Game extends Thread{
 	private JFrame frame;
 	private Frame fp;
 	private Insets insets;
+	private Server server;
 
 	public Game(int width, int height){
 		this.width = width;
@@ -25,7 +28,7 @@ public class Game extends Thread{
 		this.width += this.insets.left + this.insets.right;
 		this.height += this.insets.top + this.insets.bottom;
 		this.frame.setSize(this.width, this.height);
-		fp = new Frame();
+		fp = new Frame(this);
 		this.frame.add(fp);
 		this.frame.setVisible(true);
 		this.start();
@@ -153,6 +156,21 @@ public class Game extends Thread{
 				}
 			}
 			
+		}
+	}
+
+	//TODO
+	public void createGame() {
+
+	}
+
+	public void joinGame() {
+
+	}
+
+	class ServerListenThread extends Thread {
+		public void run() {
+			server.listen();
 		}
 	}
 }

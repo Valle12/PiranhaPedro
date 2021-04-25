@@ -21,14 +21,17 @@ public class Frame extends JPanel implements MouseListener {
     private int[] piranhas;
     private int[] wins;
     private boolean printPossible = false;
+    private boolean choosePlayer;
     private boolean firstPlayer, secondPlayer;
     private boolean currentPlayer, choosePiranha, currentCard; // false = first player's
     // turn, true = second
     // player's turn
     private boolean[] lowerCards, upperCards; // false = card not yed played, true = card played
     private String[] directions;
+    private Game game;
 
-    public Frame() {
+    public Frame(Game game) {
+        this.game = game;
         this.insets = this.getInsets();
         board = new int[11][15];
         predefineBoard();
@@ -44,6 +47,7 @@ public class Frame extends JPanel implements MouseListener {
         wins = new int[2];
         currentPlayer = (Math.random() > 0.5) ? true : false;
         currentCard = currentPlayer;
+        choosePlayer = true;
 
         // Last command
         printPossible = true;
@@ -217,6 +221,7 @@ public class Frame extends JPanel implements MouseListener {
             paintPedro(g);
             paintStonesAndPiranhasAndWins(g);
             paintChoosePiranhas(g);
+            paintNetwork(g);
         }
     }
 
@@ -396,6 +401,21 @@ public class Frame extends JPanel implements MouseListener {
         }
     }
 
+    private void paintNetwork(Graphics2D g) {
+        if (choosePlayer) {
+            Font oldFont = g.getFont();
+            Font font = new Font("Arial", Font.PLAIN, 20);
+            int boardXOffset = 850 + insets.left;
+            g.setColor(Color.RED);
+            g.fillRect(boardXOffset - 100, getHeight() - 45, 200, 40);
+            g.fillRect(boardXOffset - 100, 5, 200, 40);
+            g.setColor(Color.BLACK);
+            g.setFont(font);
+            g.drawString("Create Game", boardXOffset - 60, getHeight() - 18);
+            g.drawString("Join Game", boardXOffset - 43, 33);
+        }
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
@@ -445,6 +465,17 @@ public class Frame extends JPanel implements MouseListener {
                         continue;
                     }
                 }
+            }
+        }
+        if (choosePlayer) {
+            if (((x >= (750 + insets.left)) && (x < (950 + insets.left)) && (y >= (getHeight() - 45))
+                    && (y < (getHeight() - 5)))) {
+                choosePlayer = false;
+                game.createGame();
+            } else if (((x >= (750 + insets.left))
+                    && (x < (950 + insets.left)) && (y >= 5) && (y < 45))) {
+                choosePlayer = false;
+                game.joinGame();
             }
         }
         repaint();
