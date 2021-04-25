@@ -1,10 +1,10 @@
 package net.messages;
 
-public class Connect extends Message {
+public class Disconnect extends Message {
     private int id;
 
-    public Connect(int id) {
-        super(MessageTypes.CONNECT);
+    public Disconnect(int id) {
+        super(MessageTypes.DISCONNECT);
         this.id = id;
     }
 
