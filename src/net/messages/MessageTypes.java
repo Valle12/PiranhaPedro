@@ -1,7 +1,8 @@
 package net.messages;
 
 public enum MessageTypes {
-    CONNECT,
-    DISCONNECT,
-    SYSTEMMESSAGE
+  CONNECT,
+  DISCONNECT,
+  SYSTEMMESSAGE,
+  UPDATEBOARD
 }
