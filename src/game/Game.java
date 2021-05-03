@@ -4,6 +4,7 @@ import net.client.Client;
 import net.server.Server;
 
 import java.awt.Insets;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 
@@ -15,6 +16,7 @@ public class Game extends Thread {
   private Insets insets;
   private Server server;
   private Board gameBoard;
+  private Client client0, client1;
 
   public Game(int width, int height) {
     this.width = width;
@@ -57,8 +59,8 @@ public class Game extends Thread {
       }
       lastSavePosX = pedroJ;
       lastSavePosY = pedroI;
-      walkLength = gameBoard.getPlayCards()[gameBoard.getCurrentPlayer() ? index : i] % 3;
-      switch (gameBoard.getPlayCards()[gameBoard.getCurrentPlayer() ? index : i] / 3) {
+      walkLength = playCards[gameBoard.getCurrentPlayer() ? index : i] % 3;
+      switch (playCards[gameBoard.getCurrentPlayer() ? index : i] / 3) {
         case 0:
           nextI = pedroI - walkLength - 1;
           forSuccessful = forDifferent(board, false, true, nextI - pedroI, pedroI, pedroJ);
@@ -148,6 +150,7 @@ public class Game extends Thread {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
+      gameBoard = fp.getGameBoard();
       boolean playTurnSuccessful = true;
       int[] playCards = gameBoard.getPlayCards();
       if ((playCards[0] != -1) && (playCards[1] != -1) && (playCards[2] != -1)) {
@@ -170,13 +173,27 @@ public class Game extends Thread {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    Client client0 = new Client(0);
+    client0 = new Client(0, fp);
     client0.connect();
   }
 
   public void joinGame() {
-    Client client1 = new Client(1);
+    client1 = new Client(1, fp);
     client1.connect();
+    client1.updatePlayCards(fp.getGameBoard(), -1);
+  }
+
+  public void updateBoard(int index) {
+    Board board2 = fp.getGameBoard();
+    if (client0 != null) {
+      client0.updatePlayCards(board2, index);
+    } else {
+      client1.updatePlayCards(board2, index);
+    }
+  }
+
+  public Client getClient(boolean firstPlayer) {
+    return firstPlayer ? client0 : client1;
   }
 
   class ServerListenThread extends Thread {

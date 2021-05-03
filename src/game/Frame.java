@@ -7,6 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.Arrays;
 
 import javax.swing.JPanel;
 
@@ -184,8 +187,16 @@ public class Frame extends JPanel implements MouseListener {
     return numberOfStones;
   }
 
+  public boolean getGameCreated() {
+    return gameCreated;
+  }
+
   public Board getGameBoard() {
     return gameBoard;
+  }
+
+  public void setGameBoard(Board board) {
+    this.gameBoard = board;
   }
 
   @Override
@@ -454,7 +465,8 @@ public class Frame extends JPanel implements MouseListener {
             && ((playCards2[1] == -1) || (gameBoard.getCurrentPlayer() && (playCards2[2] == -1)))) {
           int index = (playCards2[1] == -1) ? 1 : 2;
           gameBoard.setUpperCards(i, !gameBoard.getUpperCards()[i]);
-          gameBoard.setPlayCards((playCards2[1] == -1) ? 1 : 2, i);
+          gameBoard.setPlayCards(index, i);
+          game.updateBoard(index);
           repaint();
         }
       } else if (x >= (cardXOffset + i * (80 + 3))
@@ -465,8 +477,10 @@ public class Frame extends JPanel implements MouseListener {
             && firstPlayer
             && ((playCards2[0] == -1)
                 || (!gameBoard.getCurrentPlayer() && (playCards2[2] == -1)))) {
+          int index = (playCards2[0] == -1) ? 0 : 2;
           gameBoard.setLowerCards(i, !gameBoard.getLowerCards()[i]);
-          gameBoard.setPlayCards((playCards2[0] == -1) ? 0 : 2, i);
+          gameBoard.setPlayCards(index, i);
+          game.updateBoard(index);
           repaint();
         }
       }
