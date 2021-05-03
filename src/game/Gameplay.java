@@ -141,15 +141,18 @@ public class Gameplay extends Thread {
               // TODO nextJ = pedroJ;
             } else {
               pedroI = nextI;
-              nextI = pedroI;
+              // TODO nextI = pedroI;
             }
           } else if (board[nextI][nextJ] == 2) {
             choosePiranha();
             return false;
           } else if (board[nextI][nextJ] == 0) {
             if (createLand(pedroI, pedroJ, nextI, nextJ)) {
-              pedroJ = nextJ;
-              // TODO nextJ = pedroJ;
+              if (changeX) {
+                pedroJ = nextJ;
+              } else {
+                pedroI = nextI;
+              }
             } else {
               return false;
             }
@@ -158,28 +161,7 @@ public class Gameplay extends Thread {
           choosePiranha();
           return false;
         }
-      } /*else if (changeY) {
-        if ((walkLength >= 0) ? (nextI = pedroI + 1) < 11 : (nextI = pedroI - 1) >= 0) {
-          if (board[nextI][nextJ] == 1) {
-            changePedro(pedroI, pedroJ, nextI, nextJ);
-            pedroI = nextI;
-            nextI = pedroI;
-          } else if (board[nextI][nextJ] == 2) {
-            choosePiranha();
-            return false;
-          } else if (board[nextI][nextJ] == 0) {
-            if (createLand(pedroI, pedroJ, nextI, nextJ)) {
-              pedroI = nextI;
-              nextI = pedroI;
-            } else {
-              return false;
-            }
-          }
-        } else {
-          choosePiranha();
-          return false;
-        }
-      }*/
+      }
     }
     return true;
   }
