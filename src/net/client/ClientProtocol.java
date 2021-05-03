@@ -51,10 +51,10 @@ public class ClientProtocol extends Thread {
     }
   }
 
-  public void updateBoard(Board board, int index) {
+  public void updatePlayCards(Board board, int index) {
     try {
       if (!clientSocket.isClosed()) {
-        out.writeObject(new UpdateBoardMessage(board, index));
+        out.writeObject(new UpdatePlayCardsMessage(board, index));
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -69,9 +69,8 @@ public class ClientProtocol extends Thread {
           case SYSTEMMESSAGE:
             System.out.println(((SystemMessage) m).getMessage());
             break;
-          case UPDATEBOARD:
-            // TODO updateView();
-            // playTurn();
+          case UPDATEPLAYCARDS:
+            client.setGameBoard(((UpdatePlayCardsMessage) m).getBoard());
             break;
           default:
             break;
