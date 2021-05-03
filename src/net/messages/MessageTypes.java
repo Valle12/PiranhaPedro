@@ -4,5 +4,5 @@ public enum MessageTypes {
   CONNECT,
   DISCONNECT,
   SYSTEMMESSAGE,
-  UPDATEBOARD
+  UPDATEPLAYCARDS
 }

@@ -2,12 +2,12 @@ package net.messages;
 
 import game.Board;
 
-public class UpdateBoardMessage extends Message {
+public class UpdatePlayCardsMessage extends Message {
   private Board board;
   private int index;
 
-  public UpdateBoardMessage(Board board, int index) {
-    super(MessageTypes.UPDATEBOARD);
+  public UpdatePlayCardsMessage(Board board, int index) {
+    super(MessageTypes.UPDATEPLAYCARDS);
     this.board = board;
     this.index = index;
   }
