@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class Server {
   private static final int port = 12975;
   private ServerSocket serverSocket;
-  private static final String ipAdr = "25.93.29.50";
   private boolean running;
   private ArrayList<ServerProtocol> clients = new ArrayList<>();
   private ArrayList<Integer> clientIDs = new ArrayList<>();

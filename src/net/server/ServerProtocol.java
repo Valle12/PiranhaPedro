@@ -3,12 +3,13 @@ package net.server;
 import net.messages.Connect;
 import net.messages.Disconnect;
 import net.messages.Message;
-import net.messages.UpdateBoardMessage;
+import net.messages.UpdatePlayCardsMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ServerProtocol extends Thread {
   private Socket socket;
@@ -63,18 +64,20 @@ public class ServerProtocol extends Thread {
           case SYSTEMMESSAGE:
             server.sendToAll(m);
             break;
-          case UPDATEBOARD:
-            UpdateBoardMessage ubm = (UpdateBoardMessage) m;
-            int[] playCards = ubm.getBoard().getPlayCards();
-            int index = ubm.getIndex();
-            server.addPlayCard(playCards[index], index);
-            if (server.hasAllPlayCards()) {
-              playCards = server.getPlayCards();
-              ubm.getBoard().setPlayCards(0, playCards[0]);
-              ubm.getBoard().setPlayCards(1, playCards[1]);
-              ubm.getBoard().setPlayCards(2, playCards[2]);
-              server.sendToAll(ubm);
+          case UPDATEPLAYCARDS:
+            UpdatePlayCardsMessage upcm = (UpdatePlayCardsMessage) m;
+            int[] playCards = upcm.getBoard().getPlayCards();
+            int index = upcm.getIndex();
+            if (index != -1) {
+              server.addPlayCard(playCards[index], index);
+              if (server.hasAllPlayCards()) {
+                playCards = server.getPlayCards();
+                upcm.getBoard().setPlayCards(0, playCards[0]);
+                upcm.getBoard().setPlayCards(1, playCards[1]);
+                upcm.getBoard().setPlayCards(2, playCards[2]);
+              }
             }
+            server.sendToAll(upcm);
             break;
           default:
             break;
