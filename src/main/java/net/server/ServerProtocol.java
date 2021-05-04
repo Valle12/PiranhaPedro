@@ -1,7 +1,7 @@
 package net.server;
 
-import net.messages.Connect;
-import net.messages.Disconnect;
+import net.messages.ConnectMessage;
+import net.messages.DisconnectMessage;
 import net.messages.Message;
 import net.messages.UpdatePlayCardsMessage;
 
@@ -49,12 +49,19 @@ public class ServerProtocol extends Thread {
         Message m = (Message) in.readObject();
         switch (m.getMessageType()) {
           case CONNECT:
-            int id = ((Connect) m).getID();
+            ConnectMessage cm = (ConnectMessage)m;
+            int id = cm.getID();
             server.addNewClientID(id);
             System.out.println("Client " + id + " connected.");
+            if (id == 0) {
+              server.createGameplay(cm.getBoard());
+            } else {
+              cm.setBoard(server.getGameBoard());
+              sendToClient(cm);
+            }
             break;
           case DISCONNECT:
-            id = ((Disconnect) m).getID();
+            id = ((DisconnectMessage) m).getID();
             server.removeClientID(id);
             server.removeServerProtocol(this);
             running = false;
@@ -66,18 +73,9 @@ public class ServerProtocol extends Thread {
             break;
           case UPDATEPLAYCARDS:
             UpdatePlayCardsMessage upcm = (UpdatePlayCardsMessage) m;
-            int[] playCards = upcm.getBoard().getPlayCards();
-            int index = upcm.getIndex();
-            if (index != -1) {
-              server.addPlayCard(playCards[index], index);
-              if (server.hasAllPlayCards()) {
-                playCards = server.getPlayCards();
-                upcm.getBoard().setPlayCards(0, playCards[0]);
-                upcm.getBoard().setPlayCards(1, playCards[1]);
-                upcm.getBoard().setPlayCards(2, playCards[2]);
-              }
-            }
-            server.sendToAll(upcm);
+            server.setCard(upcm.getPlayCard(), upcm.getFirstPlayer());
+            server.setPlayCard(upcm.getIndex(), upcm.getPlayCard());
+            server.repaintBoard();
             break;
           default:
             break;
