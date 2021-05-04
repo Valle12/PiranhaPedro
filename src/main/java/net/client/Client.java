@@ -23,6 +23,11 @@ public class Client {
     connection.start();
   }
 
+  public void connect(Board board) {
+    connection = new ClientProtocol(Client.ipAdr, this, board);
+    connection.start();
+  }
+
   public void disconnect() {
     connection.disconnect();
   }
@@ -31,8 +36,8 @@ public class Client {
     connection.sendMessage(message);
   }
 
-  public void updatePlayCards(Board board, int index) {
-    connection.updatePlayCards(board, index);
+  public void updatePlayCards(int playCard, int index, boolean firstPlayer) {
+    connection.updatePlayCards(playCard, index, firstPlayer);
   }
 
   // Getter

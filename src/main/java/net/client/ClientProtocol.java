@@ -22,7 +22,22 @@ public class ClientProtocol extends Thread {
       this.clientSocket = new Socket(ipAdr, ClientProtocol.port);
       this.out = new ObjectOutputStream(clientSocket.getOutputStream());
       this.in = new ObjectInputStream(clientSocket.getInputStream());
-      this.out.writeObject(new Connect(client.getID()));
+      this.out.writeObject(new ConnectMessage(client.getID()));
+      this.out.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public ClientProtocol(String ipAdr, Client client, Board board) {
+    this.client = client;
+    try {
+      this.clientSocket = new Socket(ipAdr, ClientProtocol.port);
+      this.out = new ObjectOutputStream(clientSocket.getOutputStream());
+      this.in = new ObjectInputStream(clientSocket.getInputStream());
+      ConnectMessage cm = new ConnectMessage(client.getID());
+      cm.setBoard(board);
+      this.out.writeObject(cm);
       this.out.flush();
     } catch (IOException e) {
       e.printStackTrace();
@@ -33,7 +48,7 @@ public class ClientProtocol extends Thread {
     running = false;
     try {
       if (!clientSocket.isClosed()) {
-        out.writeObject(new Disconnect(client.getID()));
+        out.writeObject(new DisconnectMessage(client.getID()));
         clientSocket.close();
       }
     } catch (IOException e) {
@@ -51,10 +66,10 @@ public class ClientProtocol extends Thread {
     }
   }
 
-  public void updatePlayCards(Board board, int index) {
+  public void updatePlayCards(int playCard, int index, boolean firstPlayer) {
     try {
       if (!clientSocket.isClosed()) {
-        out.writeObject(new UpdatePlayCardsMessage(board, index));
+        out.writeObject(new UpdatePlayCardsMessage(playCard, index, firstPlayer));
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -66,11 +81,14 @@ public class ClientProtocol extends Thread {
       try {
         Message m = (Message) in.readObject();
         switch (m.getMessageType()) {
+          case CONNECT:
+            client.setGameBoard(((ConnectMessage) m).getBoard());
+            break;
           case SYSTEMMESSAGE:
             System.out.println(((SystemMessage) m).getMessage());
             break;
-          case UPDATEPLAYCARDS:
-            client.setGameBoard(((UpdatePlayCardsMessage) m).getBoard());
+          case REPAINTBOARD:
+            client.setGameBoard(((RepaintBoardMessage) m).getBoard());
             break;
           default:
             break;
