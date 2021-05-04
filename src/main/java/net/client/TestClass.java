@@ -1,6 +1,5 @@
-package net;
+package net.client;
 
-import net.client.Client;
 import net.server.Server;
 
 public class TestClass {
