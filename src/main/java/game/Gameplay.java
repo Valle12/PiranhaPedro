@@ -23,9 +23,9 @@ public class Gameplay extends Thread {
   }
 
   private void resetBoard() {
-    gameBoard.setPlayCards(0, -1);
-    gameBoard.setPlayCards(1, -1);
-    gameBoard.setPlayCards(2, -1);
+    gameBoard.setPlayCard(0, -1);
+    gameBoard.setPlayCard(1, -1);
+    gameBoard.setPlayCard(2, -1);
     gameBoard.setStones(0, getRemainingStones(true));
     gameBoard.setStones(1, getRemainingStones(false));
     gameBoard.resetLowerAndUpperCards();
@@ -54,8 +54,8 @@ public class Gameplay extends Thread {
     gameBoard.setCurrentCard(!gameBoard.getCurrentCard());
   }
 
-  private void setPlayCard(int index, int value) {
-    gameBoard.setPlayCards(index, value);
+  public void setPlayCard(int index, int value) {
+    gameBoard.setPlayCard(index, value);
   }
 
   private void changePedro(int pedroI, int pedroJ, int nextI, int nextJ) {
@@ -76,6 +76,36 @@ public class Gameplay extends Thread {
     } else {
       choosePiranha();
       return false;
+    }
+  }
+
+  private void gameOver(boolean firstPlayer) {
+    int index = firstPlayer ? 1 : 0;
+    gameBoard.setWins(index, gameBoard.getWins()[index] + 1);
+    resetGame();
+  }
+
+  private void resetGame() {
+    gameBoard.nullifyBoard();
+    gameBoard.predefineBoard();
+    gameBoard.resetLowerAndUpperCards();
+    gameBoard.setPlayCard(0, -1);
+    gameBoard.setPlayCard(1, -1);
+    gameBoard.setPlayCard(2, -1);
+    gameBoard.setStones(0, 4);
+    gameBoard.setStones(1, 4);
+    gameBoard.setPiranhas(0, 0);
+    gameBoard.setPiranhas(1, 0);
+    gameBoard.setCurrentPlayer((Math.random() > 0.5) ? true : false);
+    gameBoard.setCurrentCard(gameBoard.getCurrentPlayer());
+    server.repaintBoard();
+  }
+
+  public void setCard(int index, boolean firstPlayer) {
+    if (firstPlayer) {
+      gameBoard.setLowerCards(index, !gameBoard.getLowerCards()[index]);
+    } else {
+      gameBoard.setUpperCards(index, !gameBoard.getUpperCards()[index]);
     }
   }
 
@@ -101,19 +131,19 @@ public class Gameplay extends Thread {
       switch (playCards[gameBoard.getCurrentPlayer() ? index : i] / 3) {
         case 0:
           nextI = pedroI - walkLength - 1;
-          forSuccessful = forDifferent(board, false, true, nextI - pedroI, pedroI, pedroJ);
+          forSuccessful = forDifferent(board, false, nextI - pedroI, pedroI, pedroJ);
           break;
         case 1:
           nextJ = pedroJ + walkLength + 1;
-          forSuccessful = forDifferent(board, true, false, nextJ - pedroJ, pedroI, pedroJ);
+          forSuccessful = forDifferent(board, true, nextJ - pedroJ, pedroI, pedroJ);
           break;
         case 2:
           nextI = pedroI + walkLength + 1;
-          forSuccessful = forDifferent(board, false, true, nextI - pedroI, pedroI, pedroJ);
+          forSuccessful = forDifferent(board, false, nextI - pedroI, pedroI, pedroJ);
           break;
         case 3:
           nextJ = pedroJ - walkLength - 1;
-          forSuccessful = forDifferent(board, true, false, nextJ - pedroJ, pedroI, pedroJ);
+          forSuccessful = forDifferent(board, true, nextJ - pedroJ, pedroI, pedroJ);
           break;
       }
       if (forSuccessful) {
@@ -128,27 +158,27 @@ public class Gameplay extends Thread {
   }
 
   private boolean forDifferent(
-      int[][] board, boolean changeX, boolean changeY, int walkLength, int pedroI, int pedroJ) {
+      int[][] board, boolean change, int walkLength, int pedroI, int pedroJ) {
     int nextI = pedroI;
     int nextJ = pedroJ;
     for (int i = 0; i < Math.abs(walkLength); i++) {
-      if (changeX) {
-        if ((walkLength >= 0) ? (nextJ = pedroJ + 1) < 15 : (nextJ = pedroJ - 1) >= 0) {
+      if (change) {
+        if ((walkLength >= 0)
+            ? ((change ? (nextJ = pedroJ + 1) : (nextI = pedroI + 1)) < (change ? 15 : 11))
+            : ((change ? (nextJ = pedroJ - 1) : (nextI = pedroI - 1)) >= 0)) {
           if (board[nextI][nextJ] == 1) {
             changePedro(pedroI, pedroJ, nextI, nextJ);
-            if (changeX) {
+            if (change) {
               pedroJ = nextJ;
-              // TODO nextJ = pedroJ;
             } else {
               pedroI = nextI;
-              // TODO nextI = pedroI;
             }
           } else if (board[nextI][nextJ] == 2) {
             choosePiranha();
             return false;
           } else if (board[nextI][nextJ] == 0) {
             if (createLand(pedroI, pedroJ, nextI, nextJ)) {
-              if (changeX) {
+              if (change) {
                 pedroJ = nextJ;
               } else {
                 pedroI = nextI;
@@ -179,11 +209,10 @@ public class Gameplay extends Thread {
         playTurnSuccessful = playTurn();
         if (playTurnSuccessful) {
           changeCurrentPlayer();
-          // TODO fp.repaintBoard();
         } else {
           resetBoard();
-          // TODO repaintBoard();
         }
+        server.repaintBoard();
       }
     }
   }

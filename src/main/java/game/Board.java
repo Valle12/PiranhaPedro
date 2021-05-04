@@ -38,6 +38,19 @@ public class Board implements Serializable {
     copy1DBooleanArray(upperCards, this.upperCards);
   }
 
+  public Board(Board gameBoard) {
+    this.board = gameBoard.getBoard();
+    this.playCards = gameBoard.getPlayCards();
+    this.stones = gameBoard.getStones();
+    this.piranhas = gameBoard.getPiranhas();
+    this.wins = gameBoard.getWins();
+    this.currentPlayer =gameBoard.getCurrentPlayer();
+    this.currentCard = gameBoard.getCurrentCard();
+    this.choosePiranha = gameBoard.getChoosePiranha();
+    this.lowerCards = gameBoard.getLowerCards();
+    this.upperCards = gameBoard.getUpperCards();
+  }
+
   private void copy2DIntArray(int[][] source, int[][] dest) {
     for (int i = 0; i < dest.length; i++) {
       for (int j = 0; j < dest[i].length; j++) {
@@ -143,7 +156,7 @@ public class Board implements Serializable {
     board[i][j] = value;
   }
 
-  public void setPlayCards(int i, int value) {
+  public void setPlayCard(int i, int value) {
     playCards[i] = value;
   }
 
