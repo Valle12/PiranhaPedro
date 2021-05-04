@@ -1,9 +1,9 @@
 package net.messages;
 
-public class Disconnect extends Message {
+public class DisconnectMessage extends Message {
   private int id;
 
-  public Disconnect(int id) {
+  public DisconnectMessage(int id) {
     super(MessageTypes.DISCONNECT);
     this.id = id;
   }
