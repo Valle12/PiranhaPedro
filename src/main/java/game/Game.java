@@ -64,6 +64,14 @@ public class Game {
     }
   }
 
+  public void updatePiranha(int index, int value, int i, int j, boolean gameCreated) {
+    if (gameCreated) {
+      client0.updatePiranha(index, value, i, j);
+    } else {
+      client1.updatePiranha(index, value, i, j);
+    }
+  }
+
   class ServerListenThread extends Thread {
     public void run() {
       server.listen();

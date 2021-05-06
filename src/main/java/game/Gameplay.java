@@ -2,6 +2,8 @@ package game;
 
 import net.server.Server;
 
+import java.util.Arrays;
+
 public class Gameplay extends Thread {
   private boolean running = true;
   private Server server;
@@ -109,6 +111,20 @@ public class Gameplay extends Thread {
     }
   }
 
+  public void setBoard(int i, int j) {
+    gameBoard.setBoard(i, j, 0);
+  }
+
+  public void setPiranhas(int index, int value) {
+    if (value == 3) {
+      gameOver((index == 0) ? true : false);
+    } else {
+      gameBoard.setChoosePiranha(false);
+      gameBoard.setPiranhas(index, value);
+      changeCurrentPlayer();
+    }
+  }
+
   private boolean playTurn() {
     int pedroI = -1;
     int pedroJ = -1;
@@ -162,35 +178,33 @@ public class Gameplay extends Thread {
     int nextI = pedroI;
     int nextJ = pedroJ;
     for (int i = 0; i < Math.abs(walkLength); i++) {
-      if (change) {
-        if ((walkLength >= 0)
-            ? ((change ? (nextJ = pedroJ + 1) : (nextI = pedroI + 1)) < (change ? 15 : 11))
-            : ((change ? (nextJ = pedroJ - 1) : (nextI = pedroI - 1)) >= 0)) {
-          if (board[nextI][nextJ] == 1) {
-            changePedro(pedroI, pedroJ, nextI, nextJ);
+      if ((walkLength >= 0)
+          ? ((change ? (nextJ = pedroJ + 1) : (nextI = pedroI + 1)) < (change ? 15 : 11))
+          : ((change ? (nextJ = pedroJ - 1) : (nextI = pedroI - 1)) >= 0)) {
+        if (board[nextI][nextJ] == 1) {
+          changePedro(pedroI, pedroJ, nextI, nextJ);
+          if (change) {
+            pedroJ = nextJ;
+          } else {
+            pedroI = nextI;
+          }
+        } else if (board[nextI][nextJ] == 2) {
+          choosePiranha();
+          return false;
+        } else if (board[nextI][nextJ] == 0) {
+          if (createLand(pedroI, pedroJ, nextI, nextJ)) {
             if (change) {
               pedroJ = nextJ;
             } else {
               pedroI = nextI;
             }
-          } else if (board[nextI][nextJ] == 2) {
-            choosePiranha();
+          } else {
             return false;
-          } else if (board[nextI][nextJ] == 0) {
-            if (createLand(pedroI, pedroJ, nextI, nextJ)) {
-              if (change) {
-                pedroJ = nextJ;
-              } else {
-                pedroI = nextI;
-              }
-            } else {
-              return false;
-            }
           }
-        } else {
-          choosePiranha();
-          return false;
         }
+      } else {
+        choosePiranha();
+        return false;
       }
     }
     return true;

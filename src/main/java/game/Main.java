@@ -6,6 +6,3 @@ public class Main {
     new Game(1000, 800);
   }
 }
-
-// TODO Call new Gameplay() from server
-// Maybe from a received message?

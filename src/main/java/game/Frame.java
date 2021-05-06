@@ -106,7 +106,6 @@ public class Frame extends JPanel implements MouseListener {
 
   public void setGameBoard(Board board) {
     this.gameBoard = new Board(board);
-    System.out.println("IN FRAME: " + Arrays.toString(gameBoard.getPlayCards()) + ", " + Arrays.toString(gameBoard.getLowerCards()) + ", " + Arrays.toString(gameBoard.getUpperCards()));
   }
 
   @Override
@@ -403,18 +402,10 @@ public class Frame extends JPanel implements MouseListener {
               && y >= (boardYOffset + i * 40)
               && y < (boardYOffset + (i + 1) * 40)) {
             gameBoard.setBoard(i, j, 0);
-            gameBoard.setPiranhas(
-                gameBoard.getCurrentCard() ? 1 : 0,
-                gameBoard.getPiranhas()[gameBoard.getCurrentCard() ? 1 : 0] + 1);
-            if (gameBoard.getPiranhas()[0] == 3) {
-              // TODO gameOver(true);
-            } else if (gameBoard.getPiranhas()[1] == 3) {
-              // TODO gameOver(false);
-            } else {
-
-            }
-            gameBoard.setChoosePiranha(false);
-            // TODO changeCurrentPlayer();
+            int index = gameBoard.getCurrentCard() ? 1 : 0;
+            gameBoard.setPiranhas(index, gameBoard.getPiranhas()[index] + 1);
+            //gameBoard.setChoosePiranha(false);
+            game.updatePiranha(index, gameBoard.getPiranhas()[index], i, j, gameCreated);
             repaint();
           } else {
             continue;
@@ -502,9 +493,6 @@ public class Frame extends JPanel implements MouseListener {
       }
       repaint();
     }
-    // TODO REMOVE
-    firstPlayer = true;
-    secondPlayer = true;
     repaint();
   }
 
