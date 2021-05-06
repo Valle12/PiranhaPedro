@@ -21,6 +21,7 @@ public class Server {
   private ArrayList<Integer> clientIDs = new ArrayList<>();
   private int[] playCards = new int[] {-1, -1, -1};
   private Gameplay game;
+  private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
   public synchronized void addNewClientID(int id) {
     clientIDs.add(id);
@@ -64,18 +65,19 @@ public class Server {
   }
 
   public synchronized void repaintBoard() {
-    System.out.println(
-        "IN SERVER: "
-            + Arrays.toString(game.getGameBoard().getPlayCards())
-            + ", "
-            + Arrays.toString(game.getGameBoard().getLowerCards())
-            + ", "
-            + Arrays.toString(game.getGameBoard().getUpperCards()));
-    sendToAll(new RepaintBoardMessage(new Board(game.getGameBoard())));
+    sendToAll(new RepaintBoardMessage(gson.toJson(game.getGameBoard())));
   }
 
   public synchronized void setCard(int index, boolean firstPlayer) {
     game.setCard(index, firstPlayer);
+  }
+
+  public synchronized void setBoard(int i, int j) {
+    game.setBoard(i, j);
+  }
+
+  public synchronized void setPiranhas(int index, int value) {
+    game.setPiranhas(index, value);
   }
 
   public void listen() {

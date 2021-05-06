@@ -1,15 +1,14 @@
 package net.server;
 
-import net.messages.ConnectMessage;
-import net.messages.DisconnectMessage;
-import net.messages.Message;
-import net.messages.UpdatePlayCardsMessage;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import game.Board;
+import net.messages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class ServerProtocol extends Thread {
   private Socket socket;
@@ -17,6 +16,7 @@ public class ServerProtocol extends Thread {
   private ObjectOutputStream out;
   private Server server;
   private boolean running = true;
+  private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
   public ServerProtocol(Socket socket, Server server) {
     this.socket = socket;
@@ -54,9 +54,10 @@ public class ServerProtocol extends Thread {
             server.addNewClientID(id);
             System.out.println("Client " + id + " connected.");
             if (id == 0) {
-              server.createGameplay(cm.getBoard());
+              String board = ((ConnectMessage) m).getBoard();
+              server.createGameplay(gson.fromJson(board, Board.class));
             } else {
-              cm.setBoard(server.getGameBoard());
+              cm.setBoard(gson.toJson(server.getGameBoard()));
               sendToClient(cm);
             }
             break;
@@ -75,6 +76,12 @@ public class ServerProtocol extends Thread {
             UpdatePlayCardsMessage upcm = (UpdatePlayCardsMessage) m;
             server.setCard(upcm.getPlayCard(), upcm.getFirstPlayer());
             server.setPlayCard(upcm.getIndex(), upcm.getPlayCard());
+            server.repaintBoard();
+            break;
+          case UPDATEPIRANHA:
+            UpdatePiranhaMessage upm = (UpdatePiranhaMessage) m;
+            server.setPiranhas(upm.getIndex(), upm.getValue());
+            server.setBoard(upm.getI(), upm.getJ());
             server.repaintBoard();
             break;
           default:
