@@ -1,5 +1,7 @@
 package net.client;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import game.Board;
 import net.messages.*;
 
@@ -15,6 +17,7 @@ public class ClientProtocol extends Thread {
   private ObjectInputStream in;
   private boolean running = true;
   private static final int port = 12975;
+  private Gson gson = new GsonBuilder().setPrettyPrinting().create();;
 
   public ClientProtocol(String ipAdr, Client client) {
     this.client = client;
@@ -36,7 +39,7 @@ public class ClientProtocol extends Thread {
       this.out = new ObjectOutputStream(clientSocket.getOutputStream());
       this.in = new ObjectInputStream(clientSocket.getInputStream());
       ConnectMessage cm = new ConnectMessage(client.getID());
-      cm.setBoard(board);
+      cm.setBoard(gson.toJson(board));
       this.out.writeObject(cm);
       this.out.flush();
     } catch (IOException e) {
@@ -76,19 +79,31 @@ public class ClientProtocol extends Thread {
     }
   }
 
+  public void updatePiranha(int index, int value, int i, int j) {
+    try {
+      if (!clientSocket.isClosed()) {
+        out.writeObject(new UpdatePiranhaMessage(index, value, i, j));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   public void run() {
     while (running) {
       try {
         Message m = (Message) in.readObject();
         switch (m.getMessageType()) {
           case CONNECT:
-            client.setGameBoard(((ConnectMessage) m).getBoard());
+            String board = ((ConnectMessage) m).getBoard();
+            client.setGameBoard(gson.fromJson(board, Board.class));
             break;
           case SYSTEMMESSAGE:
             System.out.println(((SystemMessage) m).getMessage());
             break;
           case REPAINTBOARD:
-            client.setGameBoard(((RepaintBoardMessage) m).getBoard());
+            board = ((RepaintBoardMessage) m).getBoard();
+            client.setGameBoard(gson.fromJson(board, Board.class));
             break;
           default:
             break;

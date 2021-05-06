@@ -40,6 +40,10 @@ public class Client {
     connection.updatePlayCards(playCard, index, firstPlayer);
   }
 
+  public void updatePiranha(int index, int value, int i, int j) {
+    connection.updatePiranha(index, value, i, j);
+  }
+
   // Getter
 
   public int getID() {
