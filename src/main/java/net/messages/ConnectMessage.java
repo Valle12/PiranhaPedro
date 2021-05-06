@@ -4,7 +4,7 @@ import game.Board;
 
 public class ConnectMessage extends Message {
   private int id;
-  private Board board;
+  private String board;
 
   public ConnectMessage(int id) {
     super(MessageTypes.CONNECT);
@@ -15,11 +15,11 @@ public class ConnectMessage extends Message {
     return id;
   }
 
-  public void setBoard(Board board) {
+  public void setBoard(String board) {
     this.board = board;
   }
 
-  public Board getBoard() {
+  public String getBoard() {
     return board;
   }
 }

@@ -1,16 +1,14 @@
 package net.messages;
 
-import game.Board;
-
 public class RepaintBoardMessage extends Message {
-  private Board board;
+  private String board;
 
-  public RepaintBoardMessage(Board board) {
+  public RepaintBoardMessage(String board) {
     super(MessageTypes.REPAINTBOARD);
     this.board = board;
   }
 
-  public Board getBoard() {
-    return new Board(board);
+  public String getBoard() {
+    return board;
   }
 }
