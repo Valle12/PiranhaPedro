@@ -76,13 +76,15 @@ public class ServerProtocol extends Thread {
             UpdatePlayCardsMessage upcm = (UpdatePlayCardsMessage) m;
             server.setCard(upcm.getPlayCard(), upcm.getFirstPlayer());
             server.setPlayCard(upcm.getIndex(), upcm.getPlayCard());
-            server.repaintBoard();
             break;
           case UPDATEPIRANHA:
             UpdatePiranhaMessage upm = (UpdatePiranhaMessage) m;
-            server.setPiranhas(upm.getIndex(), upm.getValue());
-            server.setBoard(upm.getI(), upm.getJ());
-            server.repaintBoard();
+            if (!server.setPiranhas(upm.getIndex(), upm.getValue())) {
+              break;
+            } else {
+              server.setBoard(upm.getI(), upm.getJ());
+              server.repaintBoard();
+            }
             break;
           default:
             break;

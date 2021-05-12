@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Server {
   private static final int port = 12975;
@@ -19,7 +18,6 @@ public class Server {
   private boolean running;
   private ArrayList<ServerProtocol> clients = new ArrayList<>();
   private ArrayList<Integer> clientIDs = new ArrayList<>();
-  private int[] playCards = new int[] {-1, -1, -1};
   private Gameplay game;
   private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -76,8 +74,8 @@ public class Server {
     game.setBoard(i, j);
   }
 
-  public synchronized void setPiranhas(int index, int value) {
-    game.setPiranhas(index, value);
+  public synchronized boolean setPiranhas(int index, int value) {
+    return game.setPiranhas(index, value);
   }
 
   public void listen() {
