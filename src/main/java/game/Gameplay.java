@@ -2,8 +2,6 @@ package game;
 
 import net.server.Server;
 
-import java.util.Arrays;
-
 public class Gameplay extends Thread {
   private boolean running = true;
   private Server server;
@@ -84,6 +82,7 @@ public class Gameplay extends Thread {
   private void gameOver(boolean firstPlayer) {
     int index = firstPlayer ? 1 : 0;
     gameBoard.setWins(index, gameBoard.getWins()[index] + 1);
+    gameBoard.setChoosePiranha(false);
     resetGame();
   }
 
@@ -98,7 +97,7 @@ public class Gameplay extends Thread {
     gameBoard.setStones(1, 4);
     gameBoard.setPiranhas(0, 0);
     gameBoard.setPiranhas(1, 0);
-    gameBoard.setCurrentPlayer((Math.random() > 0.5) ? true : false);
+    gameBoard.setCurrentPlayer(Math.random() > 0.5);
     gameBoard.setCurrentCard(gameBoard.getCurrentPlayer());
     server.repaintBoard();
   }
@@ -115,13 +114,15 @@ public class Gameplay extends Thread {
     gameBoard.setBoard(i, j, 0);
   }
 
-  public void setPiranhas(int index, int value) {
+  public boolean setPiranhas(int index, int value) {
     if (value == 3) {
-      gameOver((index == 0) ? true : false);
+      gameOver(index == 0);
+      return false;
     } else {
       gameBoard.setChoosePiranha(false);
       gameBoard.setPiranhas(index, value);
       changeCurrentPlayer();
+      return true;
     }
   }
 
@@ -221,10 +222,18 @@ public class Gameplay extends Thread {
       int[] playCards = gameBoard.getPlayCards();
       if ((playCards[0] != -1) && (playCards[1] != -1) && (playCards[2] != -1)) {
         playTurnSuccessful = playTurn();
+        boolean[] lowerCards = gameBoard.getLowerCards();
+        boolean methodValue = true;
+        for (int i = 0; i < lowerCards.length; i++) {
+          methodValue = methodValue && lowerCards[i];
+        }
         if (playTurnSuccessful) {
           changeCurrentPlayer();
         } else {
           resetBoard();
+        }
+        if (methodValue) {
+          gameBoard.resetLowerAndUpperCards();
         }
         server.repaintBoard();
       }

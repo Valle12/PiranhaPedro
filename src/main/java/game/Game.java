@@ -72,6 +72,10 @@ public class Game {
     }
   }
 
+  public void createSpecialGame(int arg) {
+    fp.createSpecialGame(arg);
+  }
+
   class ServerListenThread extends Thread {
     public void run() {
       server.listen();

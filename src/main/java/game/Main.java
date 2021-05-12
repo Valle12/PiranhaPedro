@@ -1,11 +1,22 @@
 package game;
 
 public class Main {
+  private Game game;
+
+  public Main() {
+    game = new Game(1000, 800);
+  }
+
+  public Main(String arg) {
+    game = new Game(1000, 800);
+    game.createSpecialGame(Integer.parseInt(arg));
+  }
 
   public static void main(String[] args) {
-    new Game(1000, 800);
+    if (args.length == 0) {
+      new Main();
+    } else {
+      new Main(args[0]);
+    }
   }
 }
-
-// TODO Change singleplayer, so it will run two clients on a server, but you can manage both of them
-// TODO Check for Bugs, test different fail cases

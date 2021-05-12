@@ -28,7 +28,7 @@ public class Frame extends JPanel implements MouseListener {
   private boolean chooseAI;
   private boolean singleplayer;
   private boolean activeAI;
-  private boolean gameCreated;
+  private boolean gameCreated, gameCreated2;
   private boolean firstPlayer, secondPlayer;
   private boolean currentPlayer, choosePiranha, currentCard; // false = first player's
   // turn, true = second
@@ -51,7 +51,7 @@ public class Frame extends JPanel implements MouseListener {
     stones = new int[] {4, 4};
     piranhas = new int[2];
     wins = new int[2];
-    currentPlayer = (Math.random() > 0.5) ? true : false;
+    currentPlayer = Math.random() > 0.5;
     currentCard = currentPlayer;
     chooseNetwork = true;
     gameBoard =
@@ -106,6 +106,111 @@ public class Frame extends JPanel implements MouseListener {
 
   public void setGameBoard(Board board) {
     this.gameBoard = new Board(board);
+  }
+
+  public void createSingleplayerGame() {
+    game.createGame();
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    game.joinGame();
+  }
+
+  public void createSpecialGame(int arg) {
+    if (arg == 0) {
+      // Piranhas
+      board[0][0] = 2;
+      board[2][11] = 2;
+      board[8][2] = 2;
+
+      // Land
+      board[1][0] = 1;
+      board[2][0] = 1;
+      board[3][0] = 1;
+      board[4][0] = 1;
+      board[4][1] = 1;
+      board[5][0] = 1;
+      board[6][0] = 3;
+      board[4][4] = 1;
+
+      // Empty
+      board[0][13] = 0;
+      board[7][12] = 0;
+      board[8][13] = 0;
+      board[10][8] = 0;
+
+      // Current Player
+      currentPlayer = false;
+      currentCard = false;
+
+      // Lower and Upper Cards
+      for (int i = 0; i < 12; i++) {
+        lowerCards[i] = true;
+        upperCards[i] = true;
+      }
+      lowerCards[0] = false;
+      lowerCards[2] = false;
+      upperCards[1] = false;
+
+      // Stones
+      stones[0] = 0;
+      stones[1] = 0;
+
+      // Piranhas
+      piranhas[0] = 2;
+      piranhas[1] = 2;
+
+      // Create Board
+      gameBoard = new Board(board, playCards, stones, piranhas, wins, currentPlayer, currentCard, choosePiranha, lowerCards, upperCards);
+    } else if (arg == 1) {
+      // Piranhas
+      board[0][0] = 2;
+      board[2][11] = 2;
+      board[8][2] = 2;
+
+      // Land
+      board[1][0] = 1;
+      board[2][0] = 1;
+      board[3][0] = 1;
+      board[4][0] = 1;
+      board[4][1] = 1;
+      board[5][0] = 1;
+      board[6][0] = 1;
+      board[4][4] = 1;
+      board[7][0] = 3;
+
+      // Empty
+      board[0][13] = 0;
+      board[7][12] = 0;
+      board[8][13] = 0;
+      board[10][8] = 0;
+
+      // Current Player
+      currentPlayer = false;
+      currentCard = false;
+
+      // Lower and Upper Cards
+      for (int i = 0; i < 12; i++) {
+        lowerCards[i] = true;
+        upperCards[i] = true;
+      }
+      lowerCards[0] = false;
+      lowerCards[2] = false;
+      upperCards[1] = false;
+
+      // Stones
+      stones[0] = 0;
+      stones[1] = 0;
+
+      // Piranhas
+      piranhas[0] = 2;
+      piranhas[1] = 2;
+
+      // Create Board
+      gameBoard = new Board(board, playCards, stones, piranhas, wins, currentPlayer, currentCard, choosePiranha, lowerCards, upperCards);
+    }
   }
 
   @Override
@@ -375,7 +480,7 @@ public class Frame extends JPanel implements MouseListener {
           int index = (playCards2[1] == -1) ? 1 : 2;
           gameBoard.setUpperCards(i, !gameBoard.getUpperCards()[i]);
           gameBoard.setPlayCard(index, i);
-          game.updatePlayCards(i, index, gameCreated);
+          game.updatePlayCards(i, index, false);
         }
       } else if (x >= (cardXOffset + i * (80 + 3))
           && x <= (cardXOffset + i * (80 + 3) + 80)
@@ -388,11 +493,11 @@ public class Frame extends JPanel implements MouseListener {
           int index = (playCards2[0] == -1) ? 0 : 2;
           gameBoard.setLowerCards(i, !gameBoard.getLowerCards()[i]);
           gameBoard.setPlayCard(index, i);
-          game.updatePlayCards(i, index, gameCreated);
+          game.updatePlayCards(i, index, true);
         }
       }
     }
-    if (gameBoard.getChoosePiranha()) {
+    if (gameBoard.getChoosePiranha() && (gameBoard.getCurrentCard() != firstPlayer)) {
       int[][] board2 = gameBoard.getBoard();
       for (int i = 0; i < board2.length; i++) {
         for (int j = 0; j < board2[i].length; j++) {
@@ -404,7 +509,6 @@ public class Frame extends JPanel implements MouseListener {
             gameBoard.setBoard(i, j, 0);
             int index = gameBoard.getCurrentCard() ? 1 : 0;
             gameBoard.setPiranhas(index, gameBoard.getPiranhas()[index] + 1);
-            //gameBoard.setChoosePiranha(false);
             game.updatePiranha(index, gameBoard.getPiranhas()[index], i, j, gameCreated);
             repaint();
           } else {
@@ -426,6 +530,7 @@ public class Frame extends JPanel implements MouseListener {
         choosePlayer = false;
         chooseAI = true;
         singleplayer = true;
+        createSingleplayerGame();
         // Multiplayer
       } else if (((x >= (750 + insets.left))
           && (x < (950 + insets.left))
