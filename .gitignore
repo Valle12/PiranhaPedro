@@ -25,3 +25,5 @@ hs_err_pid*
 # IntelliJ related files
 /.idea/
 /out/
+/META-INF/
+/target
