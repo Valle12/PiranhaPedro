@@ -1,5 +1,7 @@
 package game;
 
+import ft.TxtHandler;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -7,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import javax.swing.JPanel;
@@ -37,6 +40,8 @@ public class Frame extends JPanel implements MouseListener {
   private String[] directions;
   private Game game;
   private Board gameBoard;
+  private TxtHandler fileGregor, fileValentin;
+  private final String sep = System.getProperty("file.separator");
 
   public Frame(Game game) {
     this.game = game;
@@ -66,6 +71,38 @@ public class Frame extends JPanel implements MouseListener {
             choosePiranha,
             lowerCards,
             upperCards);
+    fileGregor =
+        new TxtHandler(
+            System.getProperty("user.dir")
+                + sep
+                + "src"
+                + sep
+                + "main"
+                + sep
+                + "resources"
+                + sep
+                + "files"
+                + sep
+                + "gregor.txt",
+            this,
+            "GREGOR");
+    fileGregor.start();
+    fileValentin =
+        new TxtHandler(
+            System.getProperty("user.dir")
+                + sep
+                + "src"
+                + sep
+                + "main"
+                + sep
+                + "resources"
+                + sep
+                + "files"
+                + sep
+                + "valentin.txt",
+            this,
+            "VALENTIN");
+    fileValentin.start();
 
     // Last command
     printPossible = true;
@@ -163,7 +200,18 @@ public class Frame extends JPanel implements MouseListener {
       piranhas[1] = 2;
 
       // Create Board
-      gameBoard = new Board(board, playCards, stones, piranhas, wins, currentPlayer, currentCard, choosePiranha, lowerCards, upperCards);
+      gameBoard =
+          new Board(
+              board,
+              playCards,
+              stones,
+              piranhas,
+              wins,
+              currentPlayer,
+              currentCard,
+              choosePiranha,
+              lowerCards,
+              upperCards);
     } else if (arg == 1) {
       // Piranhas
       board[0][0] = 2;
@@ -209,8 +257,57 @@ public class Frame extends JPanel implements MouseListener {
       piranhas[1] = 2;
 
       // Create Board
-      gameBoard = new Board(board, playCards, stones, piranhas, wins, currentPlayer, currentCard, choosePiranha, lowerCards, upperCards);
+      gameBoard =
+          new Board(
+              board,
+              playCards,
+              stones,
+              piranhas,
+              wins,
+              currentPlayer,
+              currentCard,
+              choosePiranha,
+              lowerCards,
+              upperCards);
     }
+  }
+
+  public void setPlayCards(int direction, int distance, String name) {
+    int index;
+    int i = direction * 3 + distance - 1;
+    if (name.equals("VALENTIN")) {
+      if (!gameBoard.getLowerCards()[i]
+          && firstPlayer
+          && ((gameBoard.getPlayCards()[0] == -1)
+              || (!gameBoard.getCurrentPlayer() && (gameBoard.getPlayCards()[2] == -1)))) {
+        index = (gameBoard.getPlayCards()[0] == -1) ? 0 : 2;
+        gameBoard.setLowerCards(i, !gameBoard.getLowerCards()[i]);
+        gameBoard.setPlayCard(index, i);
+        game.updatePlayCards(i, index, true);
+      }
+    } else if (name.equals("GREGOR")) {
+      if (!gameBoard.getUpperCards()[i]
+          && secondPlayer
+          && ((gameBoard.getPlayCards()[1] == -1)
+              || (gameBoard.getCurrentPlayer() && (gameBoard.getPlayCards()[2] == -1)))) {
+        index = (gameBoard.getPlayCards()[1] == -1) ? 1 : 2;
+        gameBoard.setUpperCards(i, !gameBoard.getUpperCards()[i]);
+        gameBoard.setPlayCard(index, i);
+        game.updatePlayCards(i, index, false);
+      }
+    }
+  }
+
+  public void setPiranhaPrompt(boolean currentCard) {
+    gameBoard.setCurrentCard(currentCard);
+    gameBoard.setChoosePiranha(true);
+  }
+
+  public void setPiranha(int x, int y) {
+    gameBoard.setBoard(y, x, 0);
+    int index = gameBoard.getCurrentCard() ? 1 : 0;
+    gameBoard.setPiranhas(index, gameBoard.getPiranhas()[index] + 1);
+    game.updatePiranha(index, gameBoard.getPiranhas()[index], y, x, gameCreated);
   }
 
   @Override
@@ -481,6 +578,17 @@ public class Frame extends JPanel implements MouseListener {
           gameBoard.setUpperCards(i, !gameBoard.getUpperCards()[i]);
           gameBoard.setPlayCard(index, i);
           game.updatePlayCards(i, index, false);
+          if (index == 1 && gameBoard.getCurrentPlayer()) {
+            // Do nothing, just don't get into else
+          } else if (index == 2 && gameBoard.getCurrentPlayer()) {
+            int[] tmp = gameBoard.getPlayCards();
+            fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
+            fileValentin.readPlayCards();
+          } else {
+            int[] tmp = gameBoard.getPlayCards();
+            fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, -1, -1);
+            fileValentin.readPlayCards();
+          }
         }
       } else if (x >= (cardXOffset + i * (80 + 3))
           && x <= (cardXOffset + i * (80 + 3) + 80)
@@ -494,6 +602,17 @@ public class Frame extends JPanel implements MouseListener {
           gameBoard.setLowerCards(i, !gameBoard.getLowerCards()[i]);
           gameBoard.setPlayCard(index, i);
           game.updatePlayCards(i, index, true);
+          if (index == 0 && !gameBoard.getCurrentPlayer()) {
+            // Do nothing, just don't get into else
+          } else if (index == 2 && !gameBoard.getCurrentPlayer()) {
+            int[] tmp = gameBoard.getPlayCards();
+            fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
+            fileGregor.readPlayCards();
+          } else {
+            int[] tmp = gameBoard.getPlayCards();
+            fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, -1, -1);
+            fileGregor.readPlayCards();
+          }
         }
       }
     }
