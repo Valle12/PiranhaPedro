@@ -7,24 +7,26 @@ import java.util.Arrays;
 
 public class Client {
   private ClientProtocol connection;
-  private static final String ipAdr = "25.93.29.50";
+  private static final String ipAdr = "192.168.178.30";
   private int id;
+  private int port;
   private Frame frame;
 
-  public Client(int id, Frame frame) {
+  public Client(int id, Frame frame, int port) {
     this.id = id;
     this.frame = frame;
+    this.port = port;
   }
 
   // Messages
 
   public void connect() {
-    connection = new ClientProtocol(Client.ipAdr, this);
+    connection = new ClientProtocol(Client.ipAdr, this, port);
     connection.start();
   }
 
   public void connect(Board board) {
-    connection = new ClientProtocol(Client.ipAdr, this, board);
+    connection = new ClientProtocol(Client.ipAdr, this, port, board);
     connection.start();
   }
 
@@ -42,6 +44,10 @@ public class Client {
 
   public void updatePiranha(int index, int value, int i, int j) {
     connection.updatePiranha(index, value, i, j);
+  }
+
+  public void setAgent(int index, int value) {
+    connection.setAgent(index, value);
   }
 
   // Getter

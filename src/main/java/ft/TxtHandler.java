@@ -15,7 +15,10 @@ public class TxtHandler extends Thread {
       writePiranha,
       readPlayCards,
       readPiranhaPrompt,
-      readPiranha;
+      readPiranha,
+      config,
+      writeConfig,
+      readConfig;
   private int dirCardOne, dirCardTwo, distCardOne, distCardTwo, x, y;
   private Frame frame;
 
@@ -26,11 +29,11 @@ public class TxtHandler extends Thread {
   }
 
   public void writePlayCards(int dirCardOne, int distCardOne, int dirCardTwo, int distCardTwo) {
-    this.writePlayCards = true;
     this.dirCardOne = dirCardOne;
     this.distCardOne = distCardOne;
     this.dirCardTwo = dirCardTwo;
     this.distCardTwo = distCardTwo;
+    this.writePlayCards = true;
   }
 
   private void writePlayCards() {
@@ -43,9 +46,9 @@ public class TxtHandler extends Thread {
     }
     try {
       bw = new BufferedWriter(new FileWriter(path));
-      bw.write("R: " + dirCardOne + ", S: " + distCardOne);
+      bw.write("(R:" + dirCardOne + ", S:" + distCardOne + ")");
       if ((dirCardTwo != -1) && (distCardTwo != -1)) {
-        bw.write("\nR: " + dirCardTwo + ", S: " + distCardTwo);
+        bw.write("\n(R:" + dirCardTwo + ", S:" + distCardTwo + ")");
       }
       bw.flush();
       bw.close();
@@ -55,8 +58,8 @@ public class TxtHandler extends Thread {
   }
 
   public void writePiranhaPrompt(boolean currentCard) {
-    this.writePiranhaPrompt = true;
     this.currentCard = currentCard;
+    this.writePiranhaPrompt = true;
   }
 
   private void writePiranhaPrompt() {
@@ -78,9 +81,9 @@ public class TxtHandler extends Thread {
   }
 
   public void writePiranha(int y, int x) {
-    this.writePiranha = true;
     this.y = y;
     this.x = x;
+    this.writePiranha = true;
   }
 
   private void writePiranha() {
@@ -93,7 +96,30 @@ public class TxtHandler extends Thread {
     }
     try {
       bw = new BufferedWriter(new FileWriter(path));
-      bw.write(y + ", " + x);
+      bw.write("(" + y + ", " + x + ")");
+      bw.flush();
+      bw.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void writeConfig(boolean config) {
+    this.config = config;
+    this.writeConfig = true;
+  }
+
+  private void writeConfigIntern() {
+    while (!isHashtagAvailable()) {
+      try {
+        sleep(100);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+    try {
+      bw = new BufferedWriter(new FileWriter(path));
+      bw.write(config + "");
       bw.flush();
       bw.close();
     } catch (IOException e) {
@@ -125,7 +151,7 @@ public class TxtHandler extends Thread {
       }
       br.close();
       bw = new BufferedWriter(new FileWriter(path, true));
-      bw.write("#");
+      bw.write("\n#");
       bw.flush();
       bw.close();
     } catch (IOException e) {
@@ -154,7 +180,7 @@ public class TxtHandler extends Thread {
       }
       br.close();
       bw = new BufferedWriter(new FileWriter(path, true));
-      bw.write("#");
+      bw.write("\n#");
       bw.flush();
       bw.close();
     } catch (IOException e) {
@@ -166,7 +192,7 @@ public class TxtHandler extends Thread {
     this.readPiranha = true;
   }
 
-  public void readPiranhaIntern() {
+  private void readPiranhaIntern() {
     String line;
     while (isHashtagAvailable()) {
       try {
@@ -178,12 +204,43 @@ public class TxtHandler extends Thread {
     try {
       br = new BufferedReader(new FileReader(path));
       while ((line = br.readLine()) != null) {
-        String[] parts = line.split(", ");
-        frame.setPiranha(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+        if (line.matches("(\\d+, \\d+)")) {
+          String[] parts = line.split(", ");
+          frame.setPiranha(Integer.parseInt(parts[1].substring(1)), Integer.parseInt(parts[0].substring(0, parts[0].length() - 1)));
+        }
       }
       br.close();
       bw = new BufferedWriter(new FileWriter(path, true));
-      bw.write("#");
+      bw.write("\n#");
+      bw.flush();
+      bw.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void readConfig() {
+    this.readConfig = true;
+  }
+
+  private void readConfigIntern() {
+    String line;
+    while (isHashtagAvailable()) {
+      try {
+        sleep(100);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+    try {
+      br = new BufferedReader(new FileReader(path));
+      while ((line = br.readLine()) != null) {
+        frame.getGameBoard().setCurrentPlayer(Boolean.parseBoolean(line));
+        frame.repaintBoard();
+      }
+      br.close();
+      bw = new BufferedWriter(new FileWriter(path, true));
+      bw.write("\n#");
       bw.flush();
       bw.close();
     } catch (IOException e) {
@@ -211,6 +268,10 @@ public class TxtHandler extends Thread {
   public void run() {
     running = true;
     while (running) {
+      if (writeConfig) {
+        writeConfigIntern();
+        writeConfig = false;
+      }
       if (writePlayCards) {
         writePlayCards();
         writePlayCards = false;
@@ -234,6 +295,10 @@ public class TxtHandler extends Thread {
       if (readPiranha) {
         readPiranhaIntern();
         readPiranha = false;
+      }
+      if (readConfig) {
+        readConfigIntern();
+        readConfig = false;
       }
       try {
         sleep(1);

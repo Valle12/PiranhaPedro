@@ -3,6 +3,8 @@ package net.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import game.Board;
+import game.Frame;
+import game.Game;
 import net.messages.*;
 
 import java.io.IOException;
@@ -19,10 +21,10 @@ public class ClientProtocol extends Thread {
   private static final int port = 12975;
   private Gson gson = new GsonBuilder().setPrettyPrinting().create();;
 
-  public ClientProtocol(String ipAdr, Client client) {
+  public ClientProtocol(String ipAdr, Client client, int port) {
     this.client = client;
     try {
-      this.clientSocket = new Socket(ipAdr, ClientProtocol.port);
+      this.clientSocket = new Socket(ipAdr, port);
       this.out = new ObjectOutputStream(clientSocket.getOutputStream());
       this.in = new ObjectInputStream(clientSocket.getInputStream());
       this.out.writeObject(new ConnectMessage(client.getID()));
@@ -32,10 +34,10 @@ public class ClientProtocol extends Thread {
     }
   }
 
-  public ClientProtocol(String ipAdr, Client client, Board board) {
+  public ClientProtocol(String ipAdr, Client client, int port, Board board) {
     this.client = client;
     try {
-      this.clientSocket = new Socket(ipAdr, ClientProtocol.port);
+      this.clientSocket = new Socket(ipAdr, port);
       this.out = new ObjectOutputStream(clientSocket.getOutputStream());
       this.in = new ObjectInputStream(clientSocket.getInputStream());
       ConnectMessage cm = new ConnectMessage(client.getID());
@@ -83,6 +85,16 @@ public class ClientProtocol extends Thread {
     try {
       if (!clientSocket.isClosed()) {
         out.writeObject(new UpdatePiranhaMessage(index, value, i, j));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void setAgent(int index, int value) {
+    try {
+      if (!clientSocket.isClosed()) {
+        out.writeObject(new SetAgentMessage(index, value));
       }
     } catch (IOException e) {
       e.printStackTrace();

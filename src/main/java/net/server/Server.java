@@ -1,5 +1,6 @@
 package net.server;
 
+import ai.Agent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import game.Board;
@@ -13,13 +14,23 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
-  private static final int port = 12975;
+  private int port;
   private ServerSocket serverSocket;
   private boolean running;
   private ArrayList<ServerProtocol> clients = new ArrayList<>();
   private ArrayList<Integer> clientIDs = new ArrayList<>();
   private Gameplay game;
   private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+  private Agent ai1, ai2;
+
+  /**
+   * Constructor for creating Server with special port number
+   *
+   * @param port Requires port Server should run on
+   */
+  public Server(int port) {
+    this.port = port;
+  }
 
   public synchronized void addNewClientID(int id) {
     clientIDs.add(id);
@@ -78,10 +89,30 @@ public class Server {
     return game.setPiranhas(index, value);
   }
 
+  public synchronized void setAi1(Agent ai1) {
+    this.ai1 = ai1;
+  }
+
+  public synchronized void setAi2(Agent ai2) {
+    this.ai2 = ai2;
+  }
+
+  public synchronized Agent getAi1() {
+    return ai1;
+  }
+
+  public synchronized Agent getAi2() {
+    return ai2;
+  }
+
+  public synchronized Gameplay getGameplay() {
+    return game;
+  }
+
   public void listen() {
     running = true;
     try {
-      serverSocket = new ServerSocket(Server.port);
+      serverSocket = new ServerSocket(port);
       while (running) {
         Socket clientSocket = serverSocket.accept();
         ServerProtocol clientThread = new ServerProtocol(clientSocket, this);

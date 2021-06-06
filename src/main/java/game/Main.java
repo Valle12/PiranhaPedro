@@ -9,6 +9,9 @@ public class Main {
 
   public Main(String arg) {
     game = new Game(1000, 800);
+    if (arg.length() > 1) {
+      game.setPort(Integer.parseInt(arg));
+    }
     game.createSpecialGame(Integer.parseInt(arg));
   }
 

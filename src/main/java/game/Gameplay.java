@@ -2,10 +2,19 @@ package game;
 
 import net.server.Server;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+
 public class Gameplay extends Thread {
   private boolean running = true;
   private Server server;
   private Board gameBoard;
+  private BufferedWriter bw;
+  private int round = 1;
+  private int gameNumber = 1;
 
   public Gameplay(Server server, Board gameBoard) {
     this.server = server;
@@ -74,7 +83,13 @@ public class Gameplay extends Thread {
       changePedro(pedroI, pedroJ, nextI, nextJ);
       return true;
     } else {
-      choosePiranha();
+      if (gameBoard.getCurrentCard() && (server.getAi2() != null)) {
+        server.getAi2().choosePiranha();
+      } else if (!gameBoard.getCurrentCard() && (server.getAi1() != null)) {
+        server.getAi1().choosePiranha();
+      } else {
+        choosePiranha();
+      }
       return false;
     }
   }
@@ -84,6 +99,19 @@ public class Gameplay extends Thread {
     gameBoard.setWins(index, gameBoard.getWins()[index] + 1);
     gameBoard.setChoosePiranha(false);
     resetGame();
+    writePiranhaToFile(
+        "Player "
+            + index
+            + " won the game. He now has "
+            + gameBoard.getWins()[index]
+            + " Wins. ("
+            + gameBoard.getWins()[0]
+            + ","
+            + gameBoard.getWins()[1]
+            + ")\n\nGame "
+            + (gameNumber + 1));
+    round = 1;
+    gameNumber++;
   }
 
   private void resetGame() {
@@ -115,6 +143,16 @@ public class Gameplay extends Thread {
   }
 
   public boolean setPiranhas(int index, int value) {
+    writePiranhaToFile(
+        "Player "
+            + index
+            + " has received a Piranha. He now has "
+            + value
+            + " Piranhas. ("
+            + (gameBoard.getPiranhas()[0] + (index == 0 ? 1 : 0))
+            + ","
+            + (gameBoard.getPiranhas()[1] + (index == 1 ? 1 : 0))
+            + ")");
     if (value == 3) {
       gameOver(index == 0);
       return false;
@@ -123,6 +161,14 @@ public class Gameplay extends Thread {
       gameBoard.setPiranhas(index, value);
       changeCurrentPlayer();
       return true;
+    }
+  }
+
+  public void writePiranhaToFile(String content) {
+    try {
+      bw.write(content + "\n");
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -190,7 +236,13 @@ public class Gameplay extends Thread {
             pedroI = nextI;
           }
         } else if (board[nextI][nextJ] == 2) {
-          choosePiranha();
+          if (gameBoard.getCurrentCard() && (server.getAi2() != null)) {
+            server.getAi2().choosePiranha();
+          } else if (!gameBoard.getCurrentCard() && (server.getAi1() != null)) {
+            server.getAi1().choosePiranha();
+          } else {
+            choosePiranha();
+          }
           return false;
         } else if (board[nextI][nextJ] == 0) {
           if (createLand(pedroI, pedroJ, nextI, nextJ)) {
@@ -204,7 +256,13 @@ public class Gameplay extends Thread {
           }
         }
       } else {
-        choosePiranha();
+        if (gameBoard.getCurrentCard() && (server.getAi2() != null)) {
+          server.getAi2().choosePiranha();
+        } else if (!gameBoard.getCurrentCard() && (server.getAi1() != null)) {
+          server.getAi1().choosePiranha();
+        } else {
+          choosePiranha();
+        }
         return false;
       }
     }
@@ -212,15 +270,42 @@ public class Gameplay extends Thread {
   }
 
   public void run() {
+    File games = new File(System.getProperty("user.dir") + "/test/games.txt");
+    try {
+      if (games.exists()) {
+        games.delete();
+      }
+      games.createNewFile();
+      bw = new BufferedWriter(new FileWriter(games, true));
+      bw.write("Game " + gameNumber + "\n");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     while (running) {
       try {
         sleep(0);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
+      if ((gameBoard.getWins()[0] == 10000) || (gameBoard.getWins()[1] == 10000)) {
+        running = false;
+      }
+      if ((server.getAi1() != null) && (gameBoard.getPlayCards()[0] == -1)) {
+        server.getAi1().think();
+      }
+      if ((server.getAi2() != null) && (gameBoard.getPlayCards()[1] == -1)) {
+        server.getAi2().think();
+      }
       boolean playTurnSuccessful = true;
       int[] playCards = gameBoard.getPlayCards();
       if ((playCards[0] != -1) && (playCards[1] != -1) && (playCards[2] != -1)) {
+        writePiranhaToFile(
+            "PlayCards in Round "
+                + round++
+                + ": "
+                + Arrays.toString(playCards)
+                + ", Current Player: "
+                + (gameBoard.getCurrentPlayer() ? "Top." : "Bottom."));
         playTurnSuccessful = playTurn();
         boolean[] lowerCards = gameBoard.getLowerCards();
         boolean methodValue = true;

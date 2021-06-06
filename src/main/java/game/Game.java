@@ -12,7 +12,9 @@ import java.awt.*;
  */
 public class Game {
   private JFrame frame;
-  private int width, height;
+  private int width;
+  private int height;
+  public static int port = 12975;
   private Insets insets;
   private Frame fp;
   private Client client0, client1;
@@ -39,20 +41,20 @@ public class Game {
 
   /** Method for game creation. Is invoked, when player presses the "Create Game" Buttton */
   public void createGame() {
-    server = new Server();
+    server = new Server(port);
     new ServerListenThread().start();
     try {
       Thread.sleep(100);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    client0 = new Client(0, fp);
+    client0 = new Client(0, fp, port);
     client0.connect(fp.getGameBoard());
   }
 
   /** Method for joining game. Is invoked, when player pressed the "Join Game" Button */
   public void joinGame() {
-    client1 = new Client(1, fp);
+    client1 = new Client(1, fp, port);
     client1.connect();
   }
 
@@ -72,8 +74,20 @@ public class Game {
     }
   }
 
+  public void setAgent(int index, int value, boolean gameCreated) {
+    if (gameCreated) {
+      client0.setAgent(index, value);
+    } else {
+      client1.setAgent(index, value);
+    }
+  }
+
   public void createSpecialGame(int arg) {
     fp.createSpecialGame(arg);
+  }
+
+  public void setPort(int port) {
+    this.port = port;
   }
 
   class ServerListenThread extends Thread {

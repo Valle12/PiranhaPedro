@@ -6,7 +6,7 @@ public class TestClass {
   private Server server;
 
   public TestClass() {
-    server = new Server();
+    server = new Server(12975);
     new ServerListenThread().start();
     try {
       joinClients();

@@ -9,38 +9,38 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-
 import javax.swing.JPanel;
 
 public class Frame extends JPanel implements MouseListener {
   private static final long serialVersionUID = 6434731205261840192L;
   private final int CARD_AMOUNT = 12;
   private Insets insets;
+  private int port;
+  private int[] playCards; // 0: first player, 1: second player, 2: player with sombrero
+  private int[] stones; // 0: lower player, 1: upper player
+  private int[] piranhas; // 0: lower player, 1: upper player
+  private int[] wins; // 0: lower player, 1: upper player
   private int[][] board; // 0 = empty, 1 = land, 2 = piranha, 3 = pedro
-  private int[]
-      playCards; // First Entry for first player, second entry for second player, third entry for
-  // player with sombrero card
-  private int[] stones;
-  private int[] piranhas;
-  private int[] wins;
-  private boolean printPossible = false;
-  private boolean chooseNetwork;
+  private boolean printPossible; // Will be set true after constructor
+  private boolean chooseFileBased = true; // Set to false, when clicked on FileBased or System Based
+  private boolean chooseNetwork; // Set to true, if System Based
   private boolean choosePlayer;
   private boolean chooseAI;
-  private boolean singleplayer;
   private boolean activeAI;
-  private boolean gameCreated, gameCreated2;
-  private boolean firstPlayer, secondPlayer;
-  private boolean currentPlayer, choosePiranha, currentCard; // false = first player's
-  // turn, true = second
-  // player's turn
-  private boolean[] lowerCards, upperCards; // false = card not yed played, true = card played
-  private String[] directions;
-  private Game game;
-  private Board gameBoard;
-  private TxtHandler fileGregor, fileValentin;
+  private boolean singleplayer; // true if "Singleplayer" was selected
+  private boolean gameCreated; // true if created game
+  private boolean firstPlayer; // true if lower player
+  private boolean secondPlayer; // true if upper player
+  private boolean currentPlayer; // true: upper player, false: lower player
+  private boolean currentCard; // true: upper player, false: lower player
+  private boolean systemBased;
+  private boolean[] lowerCards; // false = card not yed played, true = card played
+  private boolean[] upperCards; // false = card not yed played, true = card played
+  private String[] directions; // From top clockwise to left direction
+  private Game game; // Instance to interact with client side game
+  private Board gameBoard; // Instance of current Board
+  private TxtHandler fileGregor; // Important path for FileBased
+  private TxtHandler fileValentin; // Important path for FileBased
   private final String sep = System.getProperty("file.separator");
 
   public Frame(Game game) {
@@ -58,7 +58,6 @@ public class Frame extends JPanel implements MouseListener {
     wins = new int[2];
     currentPlayer = Math.random() > 0.5;
     currentCard = currentPlayer;
-    chooseNetwork = true;
     gameBoard =
         new Board(
             board,
@@ -68,41 +67,18 @@ public class Frame extends JPanel implements MouseListener {
             wins,
             currentPlayer,
             currentCard,
-            choosePiranha,
+            false,
             lowerCards,
             upperCards);
     fileGregor =
         new TxtHandler(
-            System.getProperty("user.dir")
-                + sep
-                + "src"
-                + sep
-                + "main"
-                + sep
-                + "resources"
-                + sep
-                + "files"
-                + sep
-                + "gregor.txt",
-            this,
-            "GREGOR");
+            System.getProperty("user.dir") + sep + "test" + sep + "gregor.txt", this, "GREGOR");
     fileGregor.start();
     fileValentin =
         new TxtHandler(
-            System.getProperty("user.dir")
-                + sep
-                + "src"
-                + sep
-                + "main"
-                + sep
-                + "resources"
-                + sep
-                + "files"
-                + sep
-                + "valentin.txt",
-            this,
-            "VALENTIN");
+            System.getProperty("user.dir") + sep + "test" + sep + "valentin.txt", this, "VALENTIN");
     fileValentin.start();
+    fileValentin.readConfig();
 
     // Last command
     printPossible = true;
@@ -209,7 +185,7 @@ public class Frame extends JPanel implements MouseListener {
               wins,
               currentPlayer,
               currentCard,
-              choosePiranha,
+              false,
               lowerCards,
               upperCards);
     } else if (arg == 1) {
@@ -266,7 +242,7 @@ public class Frame extends JPanel implements MouseListener {
               wins,
               currentPlayer,
               currentCard,
-              choosePiranha,
+              false,
               lowerCards,
               upperCards);
     }
@@ -310,6 +286,14 @@ public class Frame extends JPanel implements MouseListener {
     game.updatePiranha(index, gameBoard.getPiranhas()[index], y, x, gameCreated);
   }
 
+  private void readPiranhas() {
+    if (gameBoard.getCurrentCard()) {
+      fileGregor.readPiranha();
+    } else {
+      fileValentin.readPiranha();
+    }
+  }
+
   @Override
   public void paintComponent(Graphics gOld) {
     if (printPossible) {
@@ -324,9 +308,11 @@ public class Frame extends JPanel implements MouseListener {
       paintPedro(g);
       paintStonesAndPiranhasAndWins(g);
       paintChoosePiranhas(g);
+      paintChooseFileBased(g);
       paintChooseNetwork(g);
       paintNetwork(g);
       paintChooseAI(g);
+      readPiranhas();
     }
   }
 
@@ -556,6 +542,12 @@ public class Frame extends JPanel implements MouseListener {
     }
   }
 
+  private void paintChooseFileBased(Graphics2D g) {
+    if (chooseFileBased) {
+      paintChoosing(g, "    System", "     File");
+    }
+  }
+
   @Override
   public void mouseClicked(MouseEvent e) {
     int[] playCards2 = gameBoard.getPlayCards();
@@ -572,22 +564,24 @@ public class Frame extends JPanel implements MouseListener {
           && y >= cardYOffsetTop
           && y <= (cardYOffsetTop + 80)) {
         if (!gameBoard.getUpperCards()[i]
-            && secondPlayer
+            && (secondPlayer || !systemBased)
             && ((playCards2[1] == -1) || (gameBoard.getCurrentPlayer() && (playCards2[2] == -1)))) {
           int index = (playCards2[1] == -1) ? 1 : 2;
           gameBoard.setUpperCards(i, !gameBoard.getUpperCards()[i]);
           gameBoard.setPlayCard(index, i);
           game.updatePlayCards(i, index, false);
-          if (index == 1 && gameBoard.getCurrentPlayer()) {
-            // Do nothing, just don't get into else
-          } else if (index == 2 && gameBoard.getCurrentPlayer()) {
-            int[] tmp = gameBoard.getPlayCards();
-            fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
-            fileValentin.readPlayCards();
-          } else {
-            int[] tmp = gameBoard.getPlayCards();
-            fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, -1, -1);
-            fileValentin.readPlayCards();
+          if (!systemBased) {
+            if (index == 1 && gameBoard.getCurrentPlayer()) {
+              System.out.print("");
+            } else if (index == 2 && gameBoard.getCurrentPlayer()) {
+              int[] tmp = gameBoard.getPlayCards();
+              fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
+              fileValentin.readPlayCards();
+            } else {
+              int[] tmp = gameBoard.getPlayCards();
+              fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, -1, -1);
+              fileValentin.readPlayCards();
+            }
           }
         }
       } else if (x >= (cardXOffset + i * (80 + 3))
@@ -595,28 +589,32 @@ public class Frame extends JPanel implements MouseListener {
           && y >= cardYOffsetBottom
           && y <= (cardYOffsetBottom + 80)) {
         if (!gameBoard.getLowerCards()[i]
-            && firstPlayer
+            && (firstPlayer || !systemBased)
             && ((playCards2[0] == -1)
                 || (!gameBoard.getCurrentPlayer() && (playCards2[2] == -1)))) {
           int index = (playCards2[0] == -1) ? 0 : 2;
           gameBoard.setLowerCards(i, !gameBoard.getLowerCards()[i]);
           gameBoard.setPlayCard(index, i);
           game.updatePlayCards(i, index, true);
-          if (index == 0 && !gameBoard.getCurrentPlayer()) {
-            // Do nothing, just don't get into else
-          } else if (index == 2 && !gameBoard.getCurrentPlayer()) {
-            int[] tmp = gameBoard.getPlayCards();
-            fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
-            fileGregor.readPlayCards();
-          } else {
-            int[] tmp = gameBoard.getPlayCards();
-            fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, -1, -1);
-            fileGregor.readPlayCards();
+          if (!systemBased) {
+            if (index == 0 && !gameBoard.getCurrentPlayer()) {
+              System.out.print("");
+            } else if (index == 2 && !gameBoard.getCurrentPlayer()) {
+              int[] tmp = gameBoard.getPlayCards();
+              fileValentin.writePlayCards(
+                  tmp[0] / 3, (tmp[0] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
+              fileGregor.readPlayCards();
+            } else {
+              int[] tmp = gameBoard.getPlayCards();
+              fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, -1, -1);
+              fileGregor.readPlayCards();
+            }
           }
         }
       }
     }
-    if (gameBoard.getChoosePiranha() && (gameBoard.getCurrentCard() != firstPlayer)) {
+    if (gameBoard.getChoosePiranha()
+        && (gameBoard.getCurrentCard() != (firstPlayer || !systemBased))) {
       int[][] board2 = gameBoard.getBoard();
       for (int i = 0; i < board2.length; i++) {
         for (int j = 0; j < board2[i].length; j++) {
@@ -629,12 +627,49 @@ public class Frame extends JPanel implements MouseListener {
             int index = gameBoard.getCurrentCard() ? 1 : 0;
             gameBoard.setPiranhas(index, gameBoard.getPiranhas()[index] + 1);
             game.updatePiranha(index, gameBoard.getPiranhas()[index], i, j, gameCreated);
+            if (!systemBased) {
+              if (index == 0) {
+                fileValentin.writePiranha(i, j);
+              } else {
+                fileGregor.writePiranha(i, j);
+              }
+            }
             repaint();
-          } else {
-            continue;
           }
         }
       }
+    }
+    if (chooseFileBased) {
+      // System Based
+      if (((x >= (750 + insets.left))
+          && (x < (950 + insets.left))
+          && (y >= (getHeight() - 45))
+          && (y < (getHeight() - 5)))) {
+        chooseNetwork = true;
+        firstPlayer = false;
+        secondPlayer = false;
+        choosePlayer = false;
+        chooseAI = false;
+        singleplayer = false;
+        chooseFileBased = false;
+        systemBased = true;
+        // File Based
+      } else if (((x >= (750 + insets.left))
+          && (x < (950 + insets.left))
+          && (y >= 5)
+          && (y < 45))) {
+        chooseNetwork = false;
+        firstPlayer = true;
+        secondPlayer = false;
+        choosePlayer = false;
+        chooseAI = false;
+        singleplayer = true;
+        chooseFileBased = false;
+        systemBased = false;
+        createSingleplayerGame();
+      }
+      repaint();
+      return;
     }
     // Choose if you want to play in Singleplayer or Multiplayer
     if (chooseNetwork) {
@@ -693,6 +728,9 @@ public class Frame extends JPanel implements MouseListener {
       repaint();
       return;
     }
+    if (singleplayer && chooseAI) {
+      game.setAgent(1, 0, gameCreated);
+    }
     // In Singleplayer: Second Player is always AI, Choose if Player 1 should be AI as well
     // In Multiplayer: Choose if it should be AI or Player on Player which is chosen before
     if (chooseAI) {
@@ -705,6 +743,7 @@ public class Frame extends JPanel implements MouseListener {
         activeAI = true;
         firstPlayer = false;
         secondPlayer = false;
+        game.setAgent(0, 0, gameCreated);
         // Player
       } else if (((x >= (750 + insets.left))
           && (x < (950 + insets.left))
@@ -712,8 +751,8 @@ public class Frame extends JPanel implements MouseListener {
           && (y < 45))) {
         chooseAI = false;
         activeAI = false;
-        firstPlayer = singleplayer ? true : gameCreated;
-        secondPlayer = singleplayer ? false : !gameCreated;
+        firstPlayer = singleplayer || gameCreated;
+        secondPlayer = !singleplayer && !gameCreated;
       }
       repaint();
     }

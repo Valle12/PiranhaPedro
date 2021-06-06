@@ -1,5 +1,6 @@
 package net.server;
 
+import ai.RandomAgent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import game.Board;
@@ -84,6 +85,15 @@ public class ServerProtocol extends Thread {
             } else {
               server.setBoard(upm.getI(), upm.getJ());
               server.repaintBoard();
+            }
+            break;
+          case SETAGENT:
+            // TODO add switch to decide which agent to create
+            SetAgentMessage sam = (SetAgentMessage) m;
+            if (sam.getIndex() == 0) {
+              server.setAi1(new RandomAgent(server.getGameplay(), 0));
+            } else {
+              server.setAi2(new RandomAgent(server.getGameplay(), 1));
             }
             break;
           default:
