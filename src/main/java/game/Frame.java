@@ -2,14 +2,10 @@ package game;
 
 import ft.TxtHandler;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JPanel;
 
 public class Frame extends JPanel implements MouseListener {
   private static final long serialVersionUID = 6434731205261840192L;
@@ -33,14 +29,14 @@ public class Frame extends JPanel implements MouseListener {
   private boolean secondPlayer; // true if upper player
   private boolean currentPlayer; // true: upper player, false: lower player
   private boolean currentCard; // true: upper player, false: lower player
-  private boolean systemBased;
+  public static boolean systemBased;
   private boolean[] lowerCards; // false = card not yed played, true = card played
   private boolean[] upperCards; // false = card not yed played, true = card played
   private String[] directions; // From top clockwise to left direction
   private Game game; // Instance to interact with client side game
   private Board gameBoard; // Instance of current Board
-  private TxtHandler fileGregor; // Important path for FileBased
-  private TxtHandler fileValentin; // Important path for FileBased
+  public static TxtHandler fileGregor; // Important path for FileBased
+  public static TxtHandler fileValentin; // Important path for FileBased
   private final String sep = System.getProperty("file.separator");
 
   public Frame(Game game) {
@@ -78,7 +74,7 @@ public class Frame extends JPanel implements MouseListener {
         new TxtHandler(
             System.getProperty("user.dir") + sep + "test" + sep + "valentin.txt", this, "VALENTIN");
     fileValentin.start();
-    fileValentin.readConfig();
+    fileValentin.writeConfig(currentPlayer);
 
     // Last command
     printPossible = true;
@@ -253,7 +249,7 @@ public class Frame extends JPanel implements MouseListener {
     int i = direction * 3 + distance - 1;
     if (name.equals("VALENTIN")) {
       if (!gameBoard.getLowerCards()[i]
-          && firstPlayer
+          && (firstPlayer || !systemBased)
           && ((gameBoard.getPlayCards()[0] == -1)
               || (!gameBoard.getCurrentPlayer() && (gameBoard.getPlayCards()[2] == -1)))) {
         index = (gameBoard.getPlayCards()[0] == -1) ? 0 : 2;
@@ -263,7 +259,7 @@ public class Frame extends JPanel implements MouseListener {
       }
     } else if (name.equals("GREGOR")) {
       if (!gameBoard.getUpperCards()[i]
-          && secondPlayer
+          && (secondPlayer || !systemBased)
           && ((gameBoard.getPlayCards()[1] == -1)
               || (gameBoard.getCurrentPlayer() && (gameBoard.getPlayCards()[2] == -1)))) {
         index = (gameBoard.getPlayCards()[1] == -1) ? 1 : 2;
@@ -286,14 +282,6 @@ public class Frame extends JPanel implements MouseListener {
     game.updatePiranha(index, gameBoard.getPiranhas()[index], y, x, gameCreated);
   }
 
-  private void readPiranhas() {
-    if (gameBoard.getCurrentCard()) {
-      fileGregor.readPiranha();
-    } else {
-      fileValentin.readPiranha();
-    }
-  }
-
   @Override
   public void paintComponent(Graphics gOld) {
     if (printPossible) {
@@ -312,7 +300,7 @@ public class Frame extends JPanel implements MouseListener {
       paintChooseNetwork(g);
       paintNetwork(g);
       paintChooseAI(g);
-      readPiranhas();
+      fileGregor.readPiranha();
     }
   }
 
@@ -548,6 +536,44 @@ public class Frame extends JPanel implements MouseListener {
     }
   }
 
+  public static void writePlayCards(int index, boolean upperPlayer, Board gameBoard) {
+    if (!systemBased) {
+      if (upperPlayer) {
+        if (index == 1 && gameBoard.getCurrentPlayer()) {
+          System.out.print("");
+        } else if (index == 2 && gameBoard.getCurrentPlayer()) {
+          int[] tmp = gameBoard.getPlayCards();
+          fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
+          fileValentin.readPlayCards();
+        } else {
+          int[] tmp = gameBoard.getPlayCards();
+          fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, -1, -1);
+          fileValentin.readPlayCards();
+        }
+      } else {
+        if (index == 0 && !gameBoard.getCurrentPlayer()) {
+          System.out.print("");
+        } else if (index == 2 && !gameBoard.getCurrentPlayer()) {
+          int[] tmp = gameBoard.getPlayCards();
+          fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
+          fileGregor.readPlayCards();
+        } else {
+          int[] tmp = gameBoard.getPlayCards();
+          fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, -1, -1);
+          fileGregor.readPlayCards();
+        }
+      }
+    }
+  }
+
+  public TxtHandler getFileGregor() {
+    return fileGregor;
+  }
+
+  public TxtHandler getFileValentin() {
+    return fileValentin;
+  }
+
   @Override
   public void mouseClicked(MouseEvent e) {
     int[] playCards2 = gameBoard.getPlayCards();
@@ -570,19 +596,7 @@ public class Frame extends JPanel implements MouseListener {
           gameBoard.setUpperCards(i, !gameBoard.getUpperCards()[i]);
           gameBoard.setPlayCard(index, i);
           game.updatePlayCards(i, index, false);
-          if (!systemBased) {
-            if (index == 1 && gameBoard.getCurrentPlayer()) {
-              System.out.print("");
-            } else if (index == 2 && gameBoard.getCurrentPlayer()) {
-              int[] tmp = gameBoard.getPlayCards();
-              fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
-              fileValentin.readPlayCards();
-            } else {
-              int[] tmp = gameBoard.getPlayCards();
-              fileGregor.writePlayCards(tmp[1] / 3, (tmp[1] % 3) + 1, -1, -1);
-              fileValentin.readPlayCards();
-            }
-          }
+          writePlayCards(index, true, gameBoard);
         }
       } else if (x >= (cardXOffset + i * (80 + 3))
           && x <= (cardXOffset + i * (80 + 3) + 80)
@@ -596,20 +610,7 @@ public class Frame extends JPanel implements MouseListener {
           gameBoard.setLowerCards(i, !gameBoard.getLowerCards()[i]);
           gameBoard.setPlayCard(index, i);
           game.updatePlayCards(i, index, true);
-          if (!systemBased) {
-            if (index == 0 && !gameBoard.getCurrentPlayer()) {
-              System.out.print("");
-            } else if (index == 2 && !gameBoard.getCurrentPlayer()) {
-              int[] tmp = gameBoard.getPlayCards();
-              fileValentin.writePlayCards(
-                  tmp[0] / 3, (tmp[0] % 3) + 1, tmp[2] / 3, (tmp[2] % 3) + 1);
-              fileGregor.readPlayCards();
-            } else {
-              int[] tmp = gameBoard.getPlayCards();
-              fileValentin.writePlayCards(tmp[0] / 3, (tmp[0] % 3) + 1, -1, -1);
-              fileGregor.readPlayCards();
-            }
-          }
+          writePlayCards(index, false, gameBoard);
         }
       }
     }
@@ -667,6 +668,7 @@ public class Frame extends JPanel implements MouseListener {
         chooseFileBased = false;
         systemBased = false;
         createSingleplayerGame();
+        game.setAgent(0, 0, true);
       }
       repaint();
       return;
@@ -728,8 +730,9 @@ public class Frame extends JPanel implements MouseListener {
       repaint();
       return;
     }
+    // TODO Change AI
     if (singleplayer && chooseAI) {
-      game.setAgent(1, 0, gameCreated);
+      game.setAgent(1, 2, gameCreated);
     }
     // In Singleplayer: Second Player is always AI, Choose if Player 1 should be AI as well
     // In Multiplayer: Choose if it should be AI or Player on Player which is chosen before
@@ -743,7 +746,7 @@ public class Frame extends JPanel implements MouseListener {
         activeAI = true;
         firstPlayer = false;
         secondPlayer = false;
-        game.setAgent(0, 0, gameCreated);
+        game.setAgent(0, 1, gameCreated);
         // Player
       } else if (((x >= (750 + insets.left))
           && (x < (950 + insets.left))

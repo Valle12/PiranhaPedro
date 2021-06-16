@@ -39,16 +39,23 @@ public class Board implements Serializable {
   }
 
   public Board(Board gameBoard) {
-    this.board = gameBoard.getBoard();
-    this.playCards = gameBoard.getPlayCards();
-    this.stones = gameBoard.getStones();
-    this.piranhas = gameBoard.getPiranhas();
-    this.wins = gameBoard.getWins();
-    this.currentPlayer =gameBoard.getCurrentPlayer();
+    this.board = new int[gameBoard.getBoard().length][gameBoard.getBoard()[0].length];
+    copy2DIntArray(gameBoard.getBoard(), this.board);
+    this.playCards = new int[gameBoard.getPlayCards().length];
+    copy1DIntArray(gameBoard.getPlayCards(), this.playCards);
+    this.stones = new int[gameBoard.getStones().length];
+    copy1DIntArray(gameBoard.getStones(), this.stones);
+    this.piranhas = new int[gameBoard.getPiranhas().length];
+    copy1DIntArray(gameBoard.getPiranhas(), this.piranhas);
+    this.wins = new int[gameBoard.getWins().length];
+    copy1DIntArray(gameBoard.getWins(), this.wins);
+    this.currentPlayer = gameBoard.getCurrentPlayer();
     this.currentCard = gameBoard.getCurrentCard();
     this.choosePiranha = gameBoard.getChoosePiranha();
-    this.lowerCards = gameBoard.getLowerCards();
-    this.upperCards = gameBoard.getUpperCards();
+    this.lowerCards = new boolean[gameBoard.getLowerCards().length];
+    copy1DBooleanArray(gameBoard.getLowerCards(), this.lowerCards);
+    this.upperCards = new boolean[gameBoard.getUpperCards().length];
+    copy1DBooleanArray(gameBoard.getUpperCards(), this.upperCards);
   }
 
   private void copy2DIntArray(int[][] source, int[][] dest) {

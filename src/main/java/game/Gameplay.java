@@ -1,5 +1,6 @@
 package game;
 
+import net.messages.UpdatePlayCardsMessage;
 import net.server.Server;
 
 import java.io.BufferedWriter;
@@ -15,10 +16,12 @@ public class Gameplay extends Thread {
   private BufferedWriter bw;
   private int round = 1;
   private int gameNumber = 1;
+  private File games;
 
   public Gameplay(Server server, Board gameBoard) {
     this.server = server;
     this.gameBoard = gameBoard;
+    games = new File(System.getProperty("user.dir") + "/test/games.txt");
     this.start();
   }
 
@@ -99,6 +102,9 @@ public class Gameplay extends Thread {
     gameBoard.setWins(index, gameBoard.getWins()[index] + 1);
     gameBoard.setChoosePiranha(false);
     resetGame();
+    if ((gameBoard.getWins()[0] == 10000) || (gameBoard.getWins()[1] == 10000)) {
+      running = false;
+    }
     writePiranhaToFile(
         "Player "
             + index
@@ -108,8 +114,8 @@ public class Gameplay extends Thread {
             + gameBoard.getWins()[0]
             + ","
             + gameBoard.getWins()[1]
-            + ")\n\nGame "
-            + (gameNumber + 1));
+            + ")"
+            + (running ? "\n\nGame " + (gameNumber + 1) : ""));
     round = 1;
     gameNumber++;
   }
@@ -166,7 +172,10 @@ public class Gameplay extends Thread {
 
   public void writePiranhaToFile(String content) {
     try {
+      bw = new BufferedWriter(new FileWriter(games, true));
       bw.write(content + "\n");
+      bw.flush();
+      bw.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -270,7 +279,6 @@ public class Gameplay extends Thread {
   }
 
   public void run() {
-    File games = new File(System.getProperty("user.dir") + "/test/games.txt");
     try {
       if (games.exists()) {
         games.delete();
@@ -287,14 +295,26 @@ public class Gameplay extends Thread {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-      if ((gameBoard.getWins()[0] == 10000) || (gameBoard.getWins()[1] == 10000)) {
-        running = false;
+      if (!Frame.systemBased) {
+        Frame.fileGregor.readPlayCards();
       }
       if ((server.getAi1() != null) && (gameBoard.getPlayCards()[0] == -1)) {
         server.getAi1().think();
+        if (gameBoard.getCurrentPlayer()) {
+          server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[0], 0, true));
+        } else {
+          server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[0], 0, true));
+          server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[2], 2, true));
+        }
       }
       if ((server.getAi2() != null) && (gameBoard.getPlayCards()[1] == -1)) {
         server.getAi2().think();
+        if (gameBoard.getCurrentPlayer()) {
+          server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[1], 1, false));
+          server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[2], 2, false));
+        } else {
+          server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[1], 1, false));
+        }
       }
       boolean playTurnSuccessful = true;
       int[] playCards = gameBoard.getPlayCards();

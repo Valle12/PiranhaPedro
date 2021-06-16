@@ -132,21 +132,28 @@ public class TxtHandler extends Thread {
   }
 
   private void readPlayCardsIntern() {
+    System.out.println("IN READ PLAY CARDS INTERN");
     String line;
     while (isHashtagAvailable()) {
+      System.out.println("WHILE");
       try {
         sleep(100);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
+    System.out.println("IN READ PLAY CARDS INTERN 2");
     try {
       br = new BufferedReader(new FileReader(path));
       while ((line = br.readLine()) != null) {
+        if (!line.matches("\\(R:\\d, S:\\d\\)")) {
+          return;
+        }
+        System.out.println(line);
         String[] parts = line.split(",");
         frame.setPlayCards(
             Integer.parseInt(String.valueOf(parts[0].charAt(3))),
-            Integer.parseInt(String.valueOf(parts[1].charAt(4))),
+            Integer.parseInt(String.valueOf(parts[1].charAt(3))),
             name);
       }
       br.close();
@@ -204,16 +211,19 @@ public class TxtHandler extends Thread {
     try {
       br = new BufferedReader(new FileReader(path));
       while ((line = br.readLine()) != null) {
-        if (line.matches("(\\d+, \\d+)")) {
+        if (line.matches("\\(\\d+, \\d+\\)")) {
+          System.out.println("IN READ PIRANHA");
           String[] parts = line.split(", ");
-          frame.setPiranha(Integer.parseInt(parts[1].substring(1)), Integer.parseInt(parts[0].substring(0, parts[0].length() - 1)));
+          frame.setPiranha(
+              Integer.parseInt(parts[1].substring(1)),
+              Integer.parseInt(parts[0].substring(0, parts[0].length() - 1)));
+          br.close();
+          bw = new BufferedWriter(new FileWriter(path, true));
+          bw.write("\n#");
+          bw.flush();
+          bw.close();
         }
       }
-      br.close();
-      bw = new BufferedWriter(new FileWriter(path, true));
-      bw.write("\n#");
-      bw.flush();
-      bw.close();
     } catch (IOException e) {
       e.printStackTrace();
     }

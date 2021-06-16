@@ -26,4 +26,8 @@ public abstract class Agent {
       }
     }
   }
+
+  public int getPlayerNumber() {
+    return playerNumber;
+  }
 }

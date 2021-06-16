@@ -3,8 +3,6 @@ package net.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import game.Board;
-import game.Frame;
-import game.Game;
 import net.messages.*;
 
 import java.io.IOException;
@@ -19,7 +17,10 @@ public class ClientProtocol extends Thread {
   private ObjectInputStream in;
   private boolean running = true;
   private static final int port = 12975;
-  private Gson gson = new GsonBuilder().setPrettyPrinting().create();;
+  private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+  private int counter = 0;
+  private int tmpIndex;
+  private int tmpPlayCard;
 
   public ClientProtocol(String ipAdr, Client client, int port) {
     this.client = client;
@@ -116,6 +117,56 @@ public class ClientProtocol extends Thread {
           case REPAINTBOARD:
             board = ((RepaintBoardMessage) m).getBoard();
             client.setGameBoard(gson.fromJson(board, Board.class));
+            break;
+          case UPDATEPLAYCARDS:
+            UpdatePlayCardsMessage upcm = (UpdatePlayCardsMessage) m;
+            if (!client.getFrame().getGameBoard().getCurrentPlayer()
+                && upcm.getFirstPlayer()
+                && (counter == 0)) {
+              tmpIndex = upcm.getIndex();
+              tmpPlayCard = upcm.getPlayCard();
+              counter++;
+            } else if (!client.getFrame().getGameBoard().getCurrentPlayer()
+                && !upcm.getFirstPlayer()) {
+              client
+                  .getFrame()
+                  .getFileGregor()
+                  .writePlayCards(upcm.getPlayCard() / 3, upcm.getPlayCard() % 3, -1, -1);
+            } else if (client.getFrame().getGameBoard().getCurrentPlayer()
+                && upcm.getFirstPlayer()) {
+              client
+                  .getFrame()
+                  .getFileValentin()
+                  .writePlayCards(upcm.getPlayCard() / 3, upcm.getPlayCard() % 3, -1, -1);
+            } else {
+              if (counter != 1) {
+                tmpIndex = upcm.getIndex();
+                tmpPlayCard = upcm.getPlayCard();
+              }
+              counter++;
+            }
+            if (counter == 2) {
+              if (client.getFrame().getGameBoard().getCurrentPlayer()) {
+                client
+                    .getFrame()
+                    .getFileGregor()
+                    .writePlayCards(
+                        tmpPlayCard / 3,
+                        tmpPlayCard % 3,
+                        upcm.getPlayCard() / 3,
+                        upcm.getPlayCard() % 3);
+              } else {
+                client
+                    .getFrame()
+                    .getFileValentin()
+                    .writePlayCards(
+                        tmpPlayCard / 3,
+                        tmpPlayCard % 3,
+                        upcm.getPlayCard() / 3,
+                        upcm.getPlayCard() % 3);
+              }
+              counter = 0;
+            }
             break;
           default:
             break;

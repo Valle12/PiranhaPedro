@@ -1,5 +1,7 @@
 package net.server;
 
+import ai.BaselineAgent;
+import ai.MinMaxAgent;
 import ai.RandomAgent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,7 +52,7 @@ public class ServerProtocol extends Thread {
         Message m = (Message) in.readObject();
         switch (m.getMessageType()) {
           case CONNECT:
-            ConnectMessage cm = (ConnectMessage)m;
+            ConnectMessage cm = (ConnectMessage) m;
             int id = cm.getID();
             server.addNewClientID(id);
             System.out.println("Client " + id + " connected.");
@@ -88,12 +90,25 @@ public class ServerProtocol extends Thread {
             }
             break;
           case SETAGENT:
-            // TODO add switch to decide which agent to create
             SetAgentMessage sam = (SetAgentMessage) m;
-            if (sam.getIndex() == 0) {
-              server.setAi1(new RandomAgent(server.getGameplay(), 0));
+            if (sam.getValue() == 0) {
+              if (sam.getIndex() == 0) {
+                server.setAi1(new RandomAgent(server.getGameplay(), 0));
+              } else {
+                server.setAi2(new RandomAgent(server.getGameplay(), 1));
+              }
+            } else if (sam.getValue() == 1) {
+              if (sam.getIndex() == 0) {
+                server.setAi1(new BaselineAgent(server.getGameplay(), 0));
+              } else {
+                server.setAi2(new BaselineAgent(server.getGameplay(), 1));
+              }
             } else {
-              server.setAi2(new RandomAgent(server.getGameplay(), 1));
+              if (sam.getIndex() == 0) {
+                server.setAi1(new MinMaxAgent(server.getGameplay(), 0));
+              } else {
+                server.setAi2(new MinMaxAgent(server.getGameplay(), 1));
+              }
             }
             break;
           default:
