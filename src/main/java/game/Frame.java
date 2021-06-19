@@ -99,7 +99,7 @@ public class Frame extends JPanel implements MouseListener {
     board[4][3] = 1;
     board[4][4] = 1;
     board[4][5] = 1;
-    board[5][5] = 1;
+    board[5][4] = 1;
 
     // Pedro
     board[4][4] = 3;
@@ -278,8 +278,8 @@ public class Frame extends JPanel implements MouseListener {
   public void setPiranha(int x, int y) {
     gameBoard.setBoard(y, x, 0);
     int index = gameBoard.getCurrentCard() ? 1 : 0;
-    gameBoard.setPiranhas(index, gameBoard.getPiranhas()[index] + 1);
-    game.updatePiranha(index, gameBoard.getPiranhas()[index], y, x, gameCreated);
+    gameBoard.setPiranhas(1, gameBoard.getPiranhas()[1] + 1);
+    game.updatePiranha(1, gameBoard.getPiranhas()[1], y, x, gameCreated);
   }
 
   @Override
@@ -668,7 +668,7 @@ public class Frame extends JPanel implements MouseListener {
         chooseFileBased = false;
         systemBased = false;
         createSingleplayerGame();
-        game.setAgent(0, 0, true);
+        game.setAgent(0, 2, true);
       }
       repaint();
       return;
@@ -746,7 +746,7 @@ public class Frame extends JPanel implements MouseListener {
         activeAI = true;
         firstPlayer = false;
         secondPlayer = false;
-        game.setAgent(0, 1, gameCreated);
+        game.setAgent(0, 0, gameCreated);
         // Player
       } else if (((x >= (750 + insets.left))
           && (x < (950 + insets.left))

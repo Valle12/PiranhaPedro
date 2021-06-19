@@ -131,13 +131,13 @@ public class ClientProtocol extends Thread {
               client
                   .getFrame()
                   .getFileGregor()
-                  .writePlayCards(upcm.getPlayCard() / 3, upcm.getPlayCard() % 3, -1, -1);
+                  .writePlayCards(upcm.getPlayCard() / 3, (upcm.getPlayCard() % 3) + 1, -1, -1);
             } else if (client.getFrame().getGameBoard().getCurrentPlayer()
                 && upcm.getFirstPlayer()) {
               client
                   .getFrame()
                   .getFileValentin()
-                  .writePlayCards(upcm.getPlayCard() / 3, upcm.getPlayCard() % 3, -1, -1);
+                  .writePlayCards(upcm.getPlayCard() / 3, (upcm.getPlayCard() % 3) + 1, -1, -1);
             } else {
               if (counter != 1) {
                 tmpIndex = upcm.getIndex();
@@ -151,21 +151,27 @@ public class ClientProtocol extends Thread {
                     .getFrame()
                     .getFileGregor()
                     .writePlayCards(
-                        tmpPlayCard / 3,
-                        tmpPlayCard % 3,
-                        upcm.getPlayCard() / 3,
-                        upcm.getPlayCard() % 3);
+                        tmpPlayCard / 3, (tmpPlayCard % 3) + 1,
+                        upcm.getPlayCard() / 3, (upcm.getPlayCard() % 3) + 1);
               } else {
                 client
                     .getFrame()
                     .getFileValentin()
                     .writePlayCards(
                         tmpPlayCard / 3,
-                        tmpPlayCard % 3,
+                        (tmpPlayCard % 3) + 1,
                         upcm.getPlayCard() / 3,
-                        upcm.getPlayCard() % 3);
+                        (upcm.getPlayCard() % 3) + 1);
               }
               counter = 0;
+            }
+            break;
+          case UPDATEPIRANHA:
+            UpdatePiranhaMessage upm = (UpdatePiranhaMessage) m;
+            if (upm.getIndex() == 0) {
+              client.getFrame().getFileValentin().writePiranha(upm.getI(), upm.getJ());
+            } else {
+              client.getFrame().getFileGregor().writePiranha(upm.getI(), upm.getJ());
             }
             break;
           default:

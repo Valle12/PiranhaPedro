@@ -8,7 +8,7 @@ import game.SimulateTurn;
 public class MinMaxAgent extends Agent {
   private int wins;
   private int indexMax;
-  private final int depth = 1; // 1 worked best so far against random agent
+  private final int depth = 9; // 1 worked best so far against random agent
   // 1 worked best so far against baseline agent
 
   public MinMaxAgent(Gameplay game, int playerNumber) {
@@ -19,7 +19,7 @@ public class MinMaxAgent extends Agent {
   public void think() {
     Board board = game.getGameBoard();
     wins = board.getWins()[0] + board.getWins()[1];
-    Node root = new Node(board);
+    Node root = new Node(board, -1);
     if (board.getCurrentPlayer()) {
       if (playerNumber == 1) {
         minmax(root, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, root.getBoard().getCurrentCard());
@@ -27,10 +27,10 @@ public class MinMaxAgent extends Agent {
         board.setPlayCard(1, indexMax);
         SimulateTurn sim = new SimulateTurn(board);
         sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard());
+        Node node = new Node(sim.getGameBoard(), indexMax);
         minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
         sim.playTurn(indexMax);
-        node = new Node(sim.getGameBoard());
+        node = new Node(sim.getGameBoard(), indexMax);
         minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
         board.setUpperCards(indexMax, true);
         board.setPlayCard(2, indexMax);
@@ -38,7 +38,7 @@ public class MinMaxAgent extends Agent {
         SimulateTurn sim = new SimulateTurn(board);
         minmax(root, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, root.getBoard().getCurrentCard());
         sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard());
+        Node node = new Node(sim.getGameBoard(), indexMax);
         minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
         board.setLowerCards(indexMax, true);
         board.setPlayCard(0, indexMax);
@@ -48,7 +48,7 @@ public class MinMaxAgent extends Agent {
         SimulateTurn sim = new SimulateTurn(board);
         minmax(root, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, root.getBoard().getCurrentCard());
         sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard());
+        Node node = new Node(sim.getGameBoard(), indexMax);
         minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
         board.setUpperCards(indexMax, true);
         board.setPlayCard(1, indexMax);
@@ -58,10 +58,10 @@ public class MinMaxAgent extends Agent {
         board.setPlayCard(0, indexMax);
         SimulateTurn sim = new SimulateTurn(board);
         sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard());
+        Node node = new Node(sim.getGameBoard(), indexMax);
         minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
         sim.playTurn(indexMax);
-        node = new Node(sim.getGameBoard());
+        node = new Node(sim.getGameBoard(), indexMax);
         minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
         board.setLowerCards(indexMax, true);
         board.setPlayCard(2, indexMax);
@@ -72,9 +72,6 @@ public class MinMaxAgent extends Agent {
   private int minmax(Node parentNode, int depth, int alpha, int beta, boolean maximizingPlayer) {
     if ((depth == 0)
         || ((parentNode.getBoard().getWins()[0] + parentNode.getBoard().getWins()[1]) > wins)) {
-      if (parentNode.getBoard().getWins()[0] + parentNode.getBoard().getWins()[1] > wins) {
-        System.out.println("");
-      }
       return heuristics(parentNode.getBoard());
     }
     parentNode.expand();
@@ -84,8 +81,8 @@ public class MinMaxAgent extends Agent {
       for (int i = 0; i < parentNode.getChildren().size(); i++) {
         eval = minmax(parentNode.getChildren().get(i), depth - 1, alpha, beta, false);
         maxEval = Math.max(maxEval, eval);
-        if (maxEval == eval) {
-          indexMax = i;
+        if (maxEval == eval && depth == this.depth) {
+          indexMax = parentNode.getChildren().get(i).getIndex();
         }
         alpha = Math.max(alpha, eval);
         if (beta <= alpha) {
@@ -100,8 +97,8 @@ public class MinMaxAgent extends Agent {
       for (int i = 0; i < parentNode.getChildren().size(); i++) {
         eval = minmax(parentNode.getChildren().get(i), depth - 1, alpha, beta, true);
         minEval = Math.min(minEval, eval);
-        if (minEval == eval) {
-          indexMax = i;
+        if (minEval == eval && depth == this.depth) {
+          indexMax = parentNode.getChildren().get(i).getIndex();
         }
         beta = Math.min(beta, eval);
         if (beta <= alpha) {

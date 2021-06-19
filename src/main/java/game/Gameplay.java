@@ -131,7 +131,7 @@ public class Gameplay extends Thread {
     gameBoard.setStones(1, 4);
     gameBoard.setPiranhas(0, 0);
     gameBoard.setPiranhas(1, 0);
-    gameBoard.setCurrentPlayer(Math.random() > 0.5);
+    gameBoard.setCurrentPlayer(!gameBoard.getCurrentPlayer());
     gameBoard.setCurrentCard(gameBoard.getCurrentPlayer());
     server.repaintBoard();
   }
@@ -165,7 +165,7 @@ public class Gameplay extends Thread {
     } else {
       gameBoard.setChoosePiranha(false);
       gameBoard.setPiranhas(index, value);
-      changeCurrentPlayer();
+      // changeCurrentPlayer();
       return true;
     }
   }
@@ -278,6 +278,10 @@ public class Gameplay extends Thread {
     return true;
   }
 
+  public Server getServer() {
+    return server;
+  }
+
   public void run() {
     try {
       if (games.exists()) {
@@ -302,9 +306,12 @@ public class Gameplay extends Thread {
         server.getAi1().think();
         if (gameBoard.getCurrentPlayer()) {
           server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[0], 0, true));
+          System.out.println("GAMEPLAY: " + gameBoard.getPlayCards()[0]);
         } else {
           server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[0], 0, true));
           server.sendToAll(new UpdatePlayCardsMessage(gameBoard.getPlayCards()[2], 2, true));
+          System.out.println("GAMEPLAY: " + gameBoard.getPlayCards()[0]);
+          System.out.println("GAMEPLAY: " + gameBoard.getPlayCards()[2]);
         }
       }
       if ((server.getAi2() != null) && (gameBoard.getPlayCards()[1] == -1)) {
@@ -332,8 +339,10 @@ public class Gameplay extends Thread {
         for (int i = 0; i < lowerCards.length; i++) {
           methodValue = methodValue && lowerCards[i];
         }
+        // TODO HANDLE WITH CARE
+        changeCurrentPlayer();
         if (playTurnSuccessful) {
-          changeCurrentPlayer();
+          // TODO WAS HERE
         } else {
           resetBoard();
         }

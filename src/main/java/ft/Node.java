@@ -8,9 +8,11 @@ import java.util.ArrayList;
 public class Node {
   private Board board;
   private ArrayList<Node> children = new ArrayList<Node>();
+  private int index;
 
-  public Node(Board board) {
+  public Node(Board board, int index) {
     this.board = board;
+    this.index = index;
   }
 
   public Board getBoard() {
@@ -19,6 +21,10 @@ public class Node {
 
   public ArrayList<Node> getChildren() {
     return children;
+  }
+
+  public int getIndex() {
+    return index;
   }
 
   public void addChild(Node node) {
@@ -43,7 +49,7 @@ public class Node {
             board.resetLowerAndUpperCards();
           }
           board.setUpperCards(i, false);
-          children.add(new Node(sim.getGameBoard()));
+          children.add(new Node(sim.getGameBoard(), i));
         }
       } else {
         if (!board.getLowerCards()[i]) {
@@ -61,7 +67,7 @@ public class Node {
             board.resetLowerAndUpperCards();
           }
           board.setLowerCards(i, false);
-          children.add(new Node(sim.getGameBoard()));
+          children.add(new Node(sim.getGameBoard(), i));
         }
       }
     }

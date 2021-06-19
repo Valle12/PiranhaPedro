@@ -153,7 +153,7 @@ public class Board implements Serializable {
     board[4][3] = 1;
     board[4][4] = 1;
     board[4][5] = 1;
-    board[5][5] = 1;
+    board[5][4] = 1;
 
     // Pedro
     board[4][4] = 3;

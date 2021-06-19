@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Server {
   private int port;
@@ -63,6 +64,7 @@ public class Server {
 
   public synchronized void setPlayCard(int index, int playCard) {
     game.setPlayCard(index, playCard);
+    System.out.println(Arrays.toString(game.getGameBoard().getPlayCards()));
   }
 
   public synchronized void createGameplay(Board board) {

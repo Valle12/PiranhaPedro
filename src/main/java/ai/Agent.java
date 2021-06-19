@@ -1,6 +1,7 @@
 package ai;
 
 import game.Gameplay;
+import net.messages.UpdatePiranhaMessage;
 
 public abstract class Agent {
   protected Gameplay game;
@@ -21,6 +22,7 @@ public abstract class Agent {
         if (board[i][j] == 2) {
           board[i][j] = 0;
           game.setPiranhas(playerNumber, game.getGameBoard().getPiranhas()[playerNumber] + 1);
+          game.getServer().sendToAll(new UpdatePiranhaMessage(playerNumber, 0, i, j));
           return;
         }
       }

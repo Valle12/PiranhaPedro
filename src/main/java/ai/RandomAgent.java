@@ -15,10 +15,11 @@ public class RandomAgent extends Agent {
     if (board.getCurrentPlayer()) {
       if (playerNumber == 1) {
         int random, counter = 0;
-        A: while (true) {
+        A:
+        while (true) {
           random = (int) (Math.random() * 12);
           if (!board.getUpperCards()[random]) {
-            board.setUpperCards(random, !board.getUpperCards()[random]);
+            board.setUpperCards(random, true);
             board.setPlayCard(counter + 1, random);
             counter++;
             if (counter == 2) {
@@ -28,10 +29,11 @@ public class RandomAgent extends Agent {
         }
       } else {
         int random;
-        A: while (true) {
+        A:
+        while (true) {
           random = (int) (Math.random() * 12);
           if (!board.getLowerCards()[random]) {
-            board.setLowerCards(random, !board.getLowerCards()[random]);
+            board.setLowerCards(random, true);
             board.setPlayCard(0, random);
             break A;
           }
@@ -40,20 +42,22 @@ public class RandomAgent extends Agent {
     } else {
       if (playerNumber == 1) {
         int random;
-        A: while (true) {
+        A:
+        while (true) {
           random = (int) (Math.random() * 12);
           if (!board.getUpperCards()[random]) {
-            board.setUpperCards(random, !board.getUpperCards()[random]);
+            board.setUpperCards(random, true);
             board.setPlayCard(1, random);
             break A;
           }
         }
       } else {
         int random, counter = 0;
-        A: while (true) {
+        A:
+        while (true) {
           random = (int) (Math.random() * 12);
           if (!board.getLowerCards()[random]) {
-            board.setLowerCards(random, !board.getLowerCards()[random]);
+            board.setLowerCards(random, true);
             board.setPlayCard(counter, random);
             counter += 2;
             if (counter == 4) {

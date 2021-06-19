@@ -13,7 +13,7 @@ public class GameTree {
     this.depth = depth;
     this.gameBoard = gameBoard;
     this.wins = gameBoard.getWins()[0] + gameBoard.getWins()[1];
-    root = new Node(gameBoard);
+    root = new Node(gameBoard, -1);
     createGameTree(root, this.depth);
   }
 
@@ -43,7 +43,7 @@ public class GameTree {
             board.resetLowerAndUpperCards();
           }
           board.setUpperCards(i, false);
-          parentNode.addChild(new Node(sim.getGameBoard()));
+          parentNode.addChild(new Node(sim.getGameBoard(), i));
         }
       } else {
         if (!board.getLowerCards()[i]) {
@@ -61,7 +61,7 @@ public class GameTree {
             board.resetLowerAndUpperCards();
           }
           board.setLowerCards(i, false);
-          parentNode.addChild(new Node(sim.getGameBoard()));
+          parentNode.addChild(new Node(sim.getGameBoard(), i));
         }
       }
     }

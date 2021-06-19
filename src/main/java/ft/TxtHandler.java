@@ -14,11 +14,9 @@ public class TxtHandler extends Thread {
       currentCard,
       writePiranha,
       readPlayCards,
-      readPiranhaPrompt,
       readPiranha,
       config,
-      writeConfig,
-      readConfig;
+      writeConfig;
   private int dirCardOne, dirCardTwo, distCardOne, distCardTwo, x, y;
   private Frame frame;
 
@@ -96,7 +94,8 @@ public class TxtHandler extends Thread {
     }
     try {
       bw = new BufferedWriter(new FileWriter(path));
-      bw.write("(" + y + ", " + x + ")");
+      bw.write("(" + y + ", " + x + ")\n");
+      System.out.println("TXTHANDLER: Write Piranha at x: " + x + ", y: " + y);
       bw.flush();
       bw.close();
     } catch (IOException e) {
@@ -132,64 +131,35 @@ public class TxtHandler extends Thread {
   }
 
   private void readPlayCardsIntern() {
-    System.out.println("IN READ PLAY CARDS INTERN");
     String line;
+    String tmpLine = null;
     while (isHashtagAvailable()) {
-      System.out.println("WHILE");
       try {
         sleep(100);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-    System.out.println("IN READ PLAY CARDS INTERN 2");
     try {
       br = new BufferedReader(new FileReader(path));
       while ((line = br.readLine()) != null) {
         if (!line.matches("\\(R:\\d, S:\\d\\)")) {
           return;
         }
-        System.out.println(line);
         String[] parts = line.split(",");
         frame.setPlayCards(
             Integer.parseInt(String.valueOf(parts[0].charAt(3))),
             Integer.parseInt(String.valueOf(parts[1].charAt(3))),
             name);
+        tmpLine = line;
       }
-      br.close();
-      bw = new BufferedWriter(new FileWriter(path, true));
-      bw.write("\n#");
-      bw.flush();
-      bw.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void readPiranhaPrompt() {
-    this.readPiranhaPrompt = true;
-  }
-
-  private void readPiranhaPromptIntern() {
-    String line;
-    while (isHashtagAvailable()) {
-      try {
-        sleep(100);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+      if (tmpLine != null) {
+        br.close();
+        bw = new BufferedWriter(new FileWriter(path, true));
+        bw.write("\n#");
+        bw.flush();
+        bw.close();
       }
-    }
-    try {
-      br = new BufferedReader(new FileReader(path));
-      while ((line = br.readLine()) != null) {
-        String[] parts = line.split(" ");
-        frame.setPiranhaPrompt(parts[1].equals("true"));
-      }
-      br.close();
-      bw = new BufferedWriter(new FileWriter(path, true));
-      bw.write("\n#");
-      bw.flush();
-      bw.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -212,47 +182,18 @@ public class TxtHandler extends Thread {
       br = new BufferedReader(new FileReader(path));
       while ((line = br.readLine()) != null) {
         if (line.matches("\\(\\d+, \\d+\\)")) {
-          System.out.println("IN READ PIRANHA");
+          System.out.println("TXTHANDLER: Read Piranha");
           String[] parts = line.split(", ");
           frame.setPiranha(
-              Integer.parseInt(parts[1].substring(1)),
-              Integer.parseInt(parts[0].substring(0, parts[0].length() - 1)));
-          br.close();
+              Integer.parseInt(parts[1].substring(0, parts[1].length() - 1)),
+              Integer.parseInt(parts[0].substring(1)));
           bw = new BufferedWriter(new FileWriter(path, true));
           bw.write("\n#");
           bw.flush();
           bw.close();
         }
       }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void readConfig() {
-    this.readConfig = true;
-  }
-
-  private void readConfigIntern() {
-    String line;
-    while (isHashtagAvailable()) {
-      try {
-        sleep(100);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
-    try {
-      br = new BufferedReader(new FileReader(path));
-      while ((line = br.readLine()) != null) {
-        frame.getGameBoard().setCurrentPlayer(Boolean.parseBoolean(line));
-        frame.repaintBoard();
-      }
       br.close();
-      bw = new BufferedWriter(new FileWriter(path, true));
-      bw.write("\n#");
-      bw.flush();
-      bw.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -298,17 +239,9 @@ public class TxtHandler extends Thread {
         readPlayCardsIntern();
         readPlayCards = false;
       }
-      if (readPiranhaPrompt) {
-        readPiranhaPromptIntern();
-        readPiranhaPrompt = false;
-      }
       if (readPiranha) {
         readPiranhaIntern();
         readPiranha = false;
-      }
-      if (readConfig) {
-        readConfigIntern();
-        readConfig = false;
       }
       try {
         sleep(1);
