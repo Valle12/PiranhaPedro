@@ -732,7 +732,7 @@ public class Frame extends JPanel implements MouseListener {
     }
     // TODO Change AI
     if (singleplayer && chooseAI) {
-      game.setAgent(1, 2, gameCreated);
+      game.setAgent(1, 0, gameCreated);
     }
     // In Singleplayer: Second Player is always AI, Choose if Player 1 should be AI as well
     // In Multiplayer: Choose if it should be AI or Player on Player which is chosen before
@@ -746,7 +746,7 @@ public class Frame extends JPanel implements MouseListener {
         activeAI = true;
         firstPlayer = false;
         secondPlayer = false;
-        game.setAgent(0, 0, gameCreated);
+        game.setAgent(0, 2, gameCreated);
         // Player
       } else if (((x >= (750 + insets.left))
           && (x < (950 + insets.left))

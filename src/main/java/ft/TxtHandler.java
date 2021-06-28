@@ -146,6 +146,7 @@ public class TxtHandler extends Thread {
         if (!line.matches("\\(R:\\d, S:\\d\\)")) {
           return;
         }
+        System.out.println("TXTHANDLER: Card read: " + line);
         String[] parts = line.split(",");
         frame.setPlayCards(
             Integer.parseInt(String.valueOf(parts[0].charAt(3))),

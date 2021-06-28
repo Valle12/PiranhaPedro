@@ -131,7 +131,7 @@ public class Gameplay extends Thread {
     gameBoard.setStones(1, 4);
     gameBoard.setPiranhas(0, 0);
     gameBoard.setPiranhas(1, 0);
-    gameBoard.setCurrentPlayer(!gameBoard.getCurrentPlayer());
+    // gameBoard.setCurrentPlayer(!gameBoard.getCurrentPlayer());
     gameBoard.setCurrentCard(gameBoard.getCurrentPlayer());
     server.repaintBoard();
   }

@@ -23,6 +23,11 @@ public abstract class Agent {
           board[i][j] = 0;
           game.setPiranhas(playerNumber, game.getGameBoard().getPiranhas()[playerNumber] + 1);
           game.getServer().sendToAll(new UpdatePiranhaMessage(playerNumber, 0, i, j));
+          try {
+            Thread.sleep(10);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
           return;
         }
       }

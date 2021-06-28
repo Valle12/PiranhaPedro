@@ -8,7 +8,7 @@ import game.SimulateTurn;
 public class MinMaxAgent extends Agent {
   private int wins;
   private int indexMax;
-  private final int depth = 9; // 1 worked best so far against random agent
+  private final int depth = 1; // 1 worked best so far against random agent
   // 1 worked best so far against baseline agent
 
   public MinMaxAgent(Gameplay game, int playerNumber) {
@@ -26,45 +26,125 @@ public class MinMaxAgent extends Agent {
         board.setUpperCards(indexMax, true);
         board.setPlayCard(1, indexMax);
         SimulateTurn sim = new SimulateTurn(board);
-        sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard(), indexMax);
-        minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
-        sim.playTurn(indexMax);
-        node = new Node(sim.getGameBoard(), indexMax);
-        minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
-        board.setUpperCards(indexMax, true);
-        board.setPlayCard(2, indexMax);
+        if (sim.playTurn(indexMax)) {
+          Node node = new Node(sim.getGameBoard(), indexMax);
+          minmax(
+              node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
+          if (sim.playTurn(indexMax)) {
+            node = new Node(sim.getGameBoard(), indexMax);
+            minmax(
+                node,
+                depth,
+                Integer.MIN_VALUE,
+                Integer.MAX_VALUE,
+                node.getBoard().getCurrentCard());
+            board.setUpperCards(indexMax, true);
+            board.setPlayCard(2, indexMax);
+          } else {
+            int random;
+            while (true) {
+              random = (int) (Math.random() * 12);
+              if (!board.getUpperCards()[random]) {
+                board.setUpperCards(random, true);
+                board.setPlayCard(2, random);
+                break;
+              }
+            }
+          }
+        } else {
+          int random;
+          while (true) {
+            random = (int) (Math.random() * 12);
+            if (!board.getUpperCards()[random]) {
+              board.setUpperCards(random, true);
+              board.setPlayCard(2, random);
+              break;
+            }
+          }
+        }
       } else {
         SimulateTurn sim = new SimulateTurn(board);
         minmax(root, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, root.getBoard().getCurrentCard());
-        sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard(), indexMax);
-        minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
-        board.setLowerCards(indexMax, true);
-        board.setPlayCard(0, indexMax);
+        if (sim.playTurn(indexMax)) {
+          Node node = new Node(sim.getGameBoard(), indexMax);
+          minmax(
+              node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
+          board.setLowerCards(indexMax, true);
+          board.setPlayCard(0, indexMax);
+        } else {
+          int random;
+          while (true) {
+            random = (int) (Math.random() * 12);
+            if (!board.getLowerCards()[random]) {
+              board.setLowerCards(random, true);
+              board.setPlayCard(0, random);
+              break;
+            }
+          }
+        }
       }
     } else {
       if (playerNumber == 1) {
         SimulateTurn sim = new SimulateTurn(board);
         minmax(root, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, root.getBoard().getCurrentCard());
-        sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard(), indexMax);
-        minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
-        board.setUpperCards(indexMax, true);
-        board.setPlayCard(1, indexMax);
+        if (sim.playTurn(indexMax)) {
+          Node node = new Node(sim.getGameBoard(), indexMax);
+          minmax(
+              node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
+          board.setUpperCards(indexMax, true);
+          board.setPlayCard(1, indexMax);
+        } else {
+          int random;
+          while (true) {
+            random = (int) (Math.random() * 12);
+            if (!board.getUpperCards()[random]) {
+              board.setUpperCards(random, true);
+              board.setPlayCard(1, random);
+              break;
+            }
+          }
+        }
       } else {
         minmax(root, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, root.getBoard().getCurrentCard());
         board.setLowerCards(indexMax, true);
         board.setPlayCard(0, indexMax);
         SimulateTurn sim = new SimulateTurn(board);
-        sim.playTurn(indexMax);
-        Node node = new Node(sim.getGameBoard(), indexMax);
-        minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
-        sim.playTurn(indexMax);
-        node = new Node(sim.getGameBoard(), indexMax);
-        minmax(node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
-        board.setLowerCards(indexMax, true);
-        board.setPlayCard(2, indexMax);
+        if (sim.playTurn(indexMax)) {
+          Node node = new Node(sim.getGameBoard(), indexMax);
+          minmax(
+              node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, node.getBoard().getCurrentCard());
+          if (sim.playTurn(indexMax)) {
+            node = new Node(sim.getGameBoard(), indexMax);
+            minmax(
+                node,
+                depth,
+                Integer.MIN_VALUE,
+                Integer.MAX_VALUE,
+                node.getBoard().getCurrentCard());
+            board.setLowerCards(indexMax, true);
+            board.setPlayCard(2, indexMax);
+          } else {
+            int random;
+            while (true) {
+              random = (int) (Math.random() * 12);
+              if (!board.getLowerCards()[random]) {
+                board.setLowerCards(random, true);
+                board.setPlayCard(2, random);
+                break;
+              }
+            }
+          }
+        } else {
+          int random;
+          while (true) {
+            random = (int) (Math.random() * 12);
+            if (!board.getLowerCards()[random]) {
+              board.setLowerCards(random, true);
+              board.setPlayCard(2, random);
+              break;
+            }
+          }
+        }
       }
     }
   }

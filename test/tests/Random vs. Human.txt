@@ -1,0 +1,20 @@
+Game 1
+PlayCards in Round 1: [2, 6, 5], Current Player: Bottom.
+PlayCards in Round 2: [11, 8, 5], Current Player: Top.
+Player 0 has received a Piranha. He now has 1 Piranhas. (1,0)
+PlayCards in Round 3: [2, 0, 8], Current Player: Bottom.
+PlayCards in Round 4: [9, 11, 7], Current Player: Top.
+PlayCards in Round 5: [7, 1, 5], Current Player: Bottom.
+PlayCards in Round 6: [10, 10, 9], Current Player: Top.
+PlayCards in Round 7: [4, 5, 11], Current Player: Bottom.
+PlayCards in Round 8: [1, 4, 6], Current Player: Top.
+Player 0 has received a Piranha. He now has 2 Piranhas. (2,0)
+PlayCards in Round 9: [6, 4, 11], Current Player: Bottom.
+Player 1 has received a Piranha. He now has 1 Piranhas. (2,1)
+PlayCards in Round 10: [8, 2, 4], Current Player: Top.
+PlayCards in Round 11: [5, 1, 0], Current Player: Bottom.
+PlayCards in Round 12: [6, 8, 9], Current Player: Top.
+Player 1 has received a Piranha. He now has 2 Piranhas. (2,2)
+PlayCards in Round 13: [3, 0, 11], Current Player: Bottom.
+Player 1 has received a Piranha. He now has 3 Piranhas. (2,3)
+Player 0 won the game. He now has 1 Wins. (1,0)

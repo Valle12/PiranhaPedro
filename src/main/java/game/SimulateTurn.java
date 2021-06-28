@@ -16,7 +16,7 @@ public class SimulateTurn {
     return gameBoard;
   }
 
-  public void playTurn(int index) {
+  public boolean playTurn(int index) {
     int pedroI = -1;
     int pedroJ = -1;
     int nextI;
@@ -34,28 +34,31 @@ public class SimulateTurn {
       }
     }
     walkLength = index % 3;
+    boolean forSuccess = true;
     switch (index / 3) {
       case 0:
         nextI = pedroI - walkLength - 1;
-        forDifferent(board, false, nextI - pedroI, pedroI, pedroJ);
+        forSuccess = forDifferent(board, false, nextI - pedroI, pedroI, pedroJ);
         break;
       case 1:
         nextJ = pedroJ + walkLength + 1;
-        forDifferent(board, true, nextJ - pedroJ, pedroI, pedroJ);
+        forSuccess = forDifferent(board, true, nextJ - pedroJ, pedroI, pedroJ);
         break;
       case 2:
         nextI = pedroI + walkLength + 1;
-        forDifferent(board, false, nextI - pedroI, pedroI, pedroJ);
+        forSuccess = forDifferent(board, false, nextI - pedroI, pedroI, pedroJ);
         break;
       case 3:
         nextJ = pedroJ - walkLength - 1;
-        forDifferent(board, true, nextJ - pedroJ, pedroI, pedroJ);
+        forSuccess = forDifferent(board, true, nextJ - pedroJ, pedroI, pedroJ);
         break;
     }
     gameBoard.setCurrentCard(!gameBoard.getCurrentCard());
+    return forSuccess;
   }
 
-  private void forDifferent(int[][] board, boolean change, int walkLength, int pedroI, int pedroJ) {
+  private boolean forDifferent(
+      int[][] board, boolean change, int walkLength, int pedroI, int pedroJ) {
     int nextI = pedroI;
     int nextJ = pedroJ;
     for (int i = 0; i < Math.abs(walkLength); i++) {
@@ -69,6 +72,8 @@ public class SimulateTurn {
             } else {
               pedroI = nextI;
             }
+          } else {
+            return false;
           }
         } else if (board[nextI][nextJ] == 1) {
           changePedro(pedroI, pedroJ, nextI, nextJ);
@@ -91,7 +96,7 @@ public class SimulateTurn {
               choosePiranha();
             }
           }
-          return;
+          return false;
         }
       } else {
         if (gameBoard.getCurrentCard()) {
@@ -107,9 +112,10 @@ public class SimulateTurn {
             choosePiranha();
           }
         }
-        return;
+        return false;
       }
     }
+    return true;
   }
 
   private boolean createLand(int pedroI, int pedroJ, int nextI, int nextJ) {
