@@ -1,8 +1,10 @@
-module piranhapedro.piranhapedro {
+module piranhapedro {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens piranhapedro.piranhapedro to javafx.fxml;
-    exports piranhapedro.piranhapedro;
+    opens main to javafx.fxml;
+    exports main;
+    exports gui;
+    opens gui to javafx.fxml;
 }
