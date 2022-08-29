@@ -13,7 +13,7 @@ public class Launcher extends Application {
     public void start(Stage stage) throws IOException {
         mainStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/views/menuView.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1920, 1080);
+        Scene scene = new Scene(fxmlLoader.load(), Main.stageWidth, Main.stageHeight);
         mainStage.setTitle("Piranha Pedro");
         mainStage.setScene(scene);
         mainStage.setResizable(false);

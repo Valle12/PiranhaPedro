@@ -4,38 +4,51 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
-   <children>
-      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0" spacing="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 1" />
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 2" />
-            <Button layoutX="62.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 3" />
-            <Button layoutX="114.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Rechts 1" />
-            <Button layoutX="114.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Rechts 2" />
-            <Button layoutX="218.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Rechts 3" />
-            <Button layoutX="270.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Unten 1" />
-            <Button layoutX="322.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Unten 2" />
-            <Button layoutX="374.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Unten 3" />
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
+    <children>
+        <HBox alignment="CENTER" minHeight="0.0" spacing="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0"
+              AnchorPane.topAnchor="0.0">
+            <children>
+                <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 1"/>
+                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Oben 2"/>
+                <Button layoutX="62.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Oben 3"/>
+                <Button layoutX="114.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Rechts 1"/>
+                <Button layoutX="114.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Rechts 2"/>
+                <Button layoutX="218.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Rechts 3"/>
+                <Button layoutX="270.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Unten 1"/>
+                <Button layoutX="322.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Unten 2"/>
+                <Button layoutX="374.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Unten 3"/>
             <Button layoutX="426.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Links 1" />
             <Button layoutX="478.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Links 2" />
             <Button layoutX="530.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Links 3" />
          </children></HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
-         <children>
-            <AnchorPane prefWidth="1920.0">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="680.0" prefWidth="400.0">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="400.0" text="Spieler 2">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="labelNumberOfStones2" alignment="CENTER" contentDisplay="TOP" prefWidth="400.0" text="Anzahl Steine: 4">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
+        <HBox minWidth="0.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="200.0">
+            <children>
+                <AnchorPane prefWidth="1920.0">
+                    <children>
+                        <VBox alignment="CENTER">
+                            <children>
+                                <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="400.0" text="Spieler 2">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                </Label>
+                                <Label fx:id="labelNumberOfStones2" alignment="CENTER" contentDisplay="TOP"
+                                       prefWidth="400.0" text="Anzahl Steine: 4">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
                         </Label>
                         <Label fx:id="labelNumberOfWins2" text="Gewonne Spiele: 0">
                            <font>
@@ -62,58 +75,92 @@
                         </Label>
                      </children>
                   </VBox>
-                  <GridPane gridLinesVisible="true" prefHeight="680.0" prefWidth="928.0" AnchorPane.leftAnchor="400.0">
-                    <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="6.7" prefWidth="50.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                      <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                      <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                        <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="50.0" valignment="CENTER" vgrow="ALWAYS" />
-                    </rowConstraints>
+                        <GridPane gridLinesVisible="true" prefWidth="928.0" AnchorPane.leftAnchor="400.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="6.7"
+                                                   prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   percentWidth="6.7" prefWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="6.7"
+                                                   prefWidth="10.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="10.0" percentHeight="9.0" prefHeight="10.0"
+                                                valignment="CENTER" vgrow="ALWAYS"/>
+                            </rowConstraints>
                   </GridPane>
-                  <VBox alignment="CENTER" prefHeight="680.0" prefWidth="200.0" spacing="50.0" AnchorPane.rightAnchor="200.0">
-                     <children>
-                        <Pane fx:id="pane2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;" />
-                        <Pane fx:id="pane1" prefHeight="200.0" prefWidth="200.0" />
-                     </children>
-                  </VBox>
+                        <VBox alignment="CENTER" fillWidth="false" prefHeight="680.0" prefWidth="200.0" spacing="50.0"
+                              AnchorPane.rightAnchor="0.0">
+                            <children>
+                                <Pane fx:id="pane2" style="-fx-background-color: red;"/>
+                                <Pane fx:id="pane1"/>
+                            </children>
+                        </VBox>
                </children>
             </AnchorPane>
          </children></HBox>
-      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0" spacing="8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 1" />
-            <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 2" />
-            <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 3" />
-            <Button layoutX="114.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Rechts 1" />
-            <Button layoutX="166.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Rechts 2" />
-            <Button layoutX="218.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Rechts 3" />
-            <Button layoutX="270.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Unten 1" />
-            <Button layoutX="322.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Unten 2" />
-            <Button layoutX="374.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Unten 3" />
+        <HBox alignment="CENTER" minWidth="0.0" spacing="8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="8.0"
+              AnchorPane.rightAnchor="8.0">
+            <children>
+                <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 1"/>
+                <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 2"/>
+                <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Oben 3"/>
+                <Button layoutX="114.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Rechts 1"/>
+                <Button layoutX="166.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Rechts 2"/>
+                <Button layoutX="218.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Rechts 3"/>
+                <Button layoutX="270.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Unten 1"/>
+                <Button layoutX="322.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Unten 2"/>
+                <Button layoutX="374.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0"
+                        text="Unten 3"/>
             <Button layoutX="426.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Links 1" />
             <Button layoutX="478.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Links 2" />
             <Button layoutX="530.0" layoutY="10.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Links 3" />

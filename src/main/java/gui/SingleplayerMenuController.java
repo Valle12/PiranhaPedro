@@ -11,7 +11,7 @@ public class SingleplayerMenuController {
     private Scene gameScene;
 
     public void switchToGame() throws IOException {
-        gameScene = new Scene(new FXMLLoader(this.getClass().getResource("/views/gameView.fxml")).load(), 1920, 1080);
+        gameScene = new Scene(new FXMLLoader(this.getClass().getResource("/views/gameView.fxml")).load(), Main.stageWidth, Main.stageHeight);
         Launcher.mainStage.setScene(gameScene);
         Main.gameController.initialize();
     }
