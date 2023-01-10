@@ -22,6 +22,10 @@ public class Turn {
         return direction.ordinal() * 3 + amount - 1;
     }
 
+    public static Turn intToTurn(int number) {
+        return new Turn(Direction.values()[number / 3], number % 3 + 1);
+    }
+
     // Prints out Turn[]
     public static void print(Turn[] turns) {
         for (Turn turn : turns) {

@@ -1,14 +1,17 @@
 package AI;
 
+import common.Turn;
+
 public abstract class GeneralAI {
-    private boolean[] cardsPlayed = new boolean[12];
-    private boolean startingPlayer;
+    protected boolean[] playerOneCards;
+    protected boolean startingPlayer;
+    protected Turn[] turns;
 
-    public GeneralAI(boolean startingPlayer) {
+    public GeneralAI(boolean startingPlayer, boolean[] playerOneCards, Turn[] turns) {
         this.startingPlayer = startingPlayer;
+        this.playerOneCards = playerOneCards;
+        this.turns = turns;
     }
 
-    public void calculateMove() {
-
-    }
+    public abstract void calculateMove();
 }

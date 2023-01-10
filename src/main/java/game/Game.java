@@ -21,7 +21,7 @@ public class Game {
         players[1] = new PlayerStats(!startingPlayer);
         playerZeroCards = players[0].getCardsPlayed();
         // TODO determine which ai you want to create later
-        aiPlayer = new RandomAI(startingPlayer);
+        aiPlayer = new RandomAI(startingPlayer, players[1].getCardsPlayed(), turns);
     }
 
     public void addTurn(Turn turn) {
@@ -34,18 +34,14 @@ public class Game {
                 turns[2] = turn;
                 playerZeroCards[turn.turnToInt()] = true;
                 Main.gameController.changeDisabledStateAllButtons(true);
-                calculateAIMove();
+                aiPlayer.calculateMove();
             }
         } else {
             turns[0] = turn;
             playerZeroCards[turn.turnToInt()] = true;
             Main.gameController.changeDisabledStateAllButtons(true);
-            calculateAIMove();
+            aiPlayer.calculateMove();
         }
-    }
-
-    public void calculateAIMove() {
-        aiPlayer.calculateMove();
     }
 
     public PlayerStats[] getPlayers() {
