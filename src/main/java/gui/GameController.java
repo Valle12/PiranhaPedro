@@ -100,21 +100,7 @@ public class GameController {
         }
 
         // Iterate over all nodes inside the GridPane and color them correctly
-        for (Node node: gridPaneField.getChildren()) {
-            if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) < 11 && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) < 15) {
-                if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.WATER) {
-                    node.setStyle("-fx-background-color: blue; -fx-border-color: black");
-                } else if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.PEDRO) {
-                    node.setStyle("-fx-background-color: lime; -fx-border-color: black");
-                } else if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.ISLAND) {
-                    node.setStyle("-fx-background-color: yellow; -fx-border-color: black");
-                } else if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.PIRANHA) {
-                    node.setStyle("-fx-background-color: red; -fx-border-color: black");
-                } else {
-                    node.setStyle("-fx-background-color: gray; -fx-border-color: black");
-                }
-            }
-        }
+        paintField(field);
 
         // Initialize onAction methods
         buttonUp1.setOnAction(e -> game.addTurn(new Turn(Direction.UP, 1)));
@@ -145,6 +131,29 @@ public class GameController {
         playerButtons[11] = buttonLeft3;
     }
 
+    /**
+     * Iterate over all nodes inside the GridPane and color them correctly
+     *
+     * @param field field with all cells on the board
+     */
+    public void paintField(GameCell[][] field) {
+        for (Node node : gridPaneField.getChildren()) {
+            if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) < 11 && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) < 15) {
+                if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.WATER) {
+                    node.setStyle("-fx-background-color: blue; -fx-border-color: black");
+                } else if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.PEDRO) {
+                    node.setStyle("-fx-background-color: lime; -fx-border-color: black");
+                } else if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.ISLAND) {
+                    node.setStyle("-fx-background-color: yellow; -fx-border-color: black");
+                } else if (field[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] == GameCell.PIRANHA) {
+                    node.setStyle("-fx-background-color: red; -fx-border-color: black");
+                } else {
+                    node.setStyle("-fx-background-color: gray; -fx-border-color: black");
+                }
+            }
+        }
+    }
+
     public void updateClickableButtons() {
         boolean[] cardsPlayed = game.getPlayers()[0].getCardsPlayed();
 
@@ -158,5 +167,12 @@ public class GameController {
         for (Button button : playerButtons) {
             button.setDisable(disabled);
         }
+    }
+
+    /**
+     * @return GameField Instance
+     */
+    public GameField getGameField() {
+        return gameField;
     }
 }

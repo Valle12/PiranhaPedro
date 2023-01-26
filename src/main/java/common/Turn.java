@@ -13,11 +13,18 @@ public class Turn {
         return direction;
     }
 
+    /**
+     * @return The walk distance from this turn
+     */
     public int getAmount() {
         return amount;
     }
 
-    // Calculates the number in the array from the turn parameters
+    /**
+     * Calculates the number in the array from this turn
+     *
+     * @return Turn transformed to number
+     */
     public int turnToInt() {
         return direction.ordinal() * 3 + amount - 1;
     }
