@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane fx:id="anchorPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
+            prefWidth="1080.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.GameController">
+    <HBox prefHeight="90.0" prefWidth="1080.0" spacing="5.45"
+          AnchorPane.topAnchor="0.0">
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="1 Up"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Up"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Up"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="1 Right"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Right"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Right"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="1 Down"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Down"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Down"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="1 Left"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Left"/>
+        <Button disable="true" mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Left"/>
+    </HBox>
+    <HBox prefHeight="540.0" prefWidth="1080.0" spacing="5.0"
+          AnchorPane.bottomAnchor="90.0" AnchorPane.topAnchor="90.0">
+        <VBox alignment="CENTER" prefHeight="900.0" prefWidth="165.0"
+              spacing="40.0">
+            <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0"
+                  prefWidth="165.0">
+                <Label text="Player 2">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <Label text="Number of Stones">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label text="Number of Piranhas">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label text="Number of Wins">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+            </VBox>
+            <VBox alignment="TOP_RIGHT" prefHeight="200.0"
+                  prefWidth="165.0">
+                <Label text="Player 1">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <Label text="Number of Stones">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label text="Number of Piranhas">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label text="Number of Wins">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+            </VBox>
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="530.0" prefWidth="20.0"
+              spacing="40.0">
+            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0"
+                  prefWidth="20.0">
+                <Label fx:id="labelStones2" prefWidth="20.0"
+                       text="4">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="labelPiranhas2" prefWidth="20.0"
+                       text="0">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="labelWins2" prefWidth="20.0"
+                       text="0">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="20.0">
+                <Label>
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="labelStones1" text="4">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="labelPiranhas1" text="0">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="labelWins1" text="0">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+            </VBox>
+        </VBox>
+        <GridPane fx:id="gridPaneField" gridLinesVisible="true"
+                  maxHeight="520.0" maxWidth="710.0" prefHeight="520.0"
+                  prefWidth="710.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                   prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <HBox.margin>
+                <Insets top="10.0"/>
+            </HBox.margin>
+        </GridPane>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="145.0"
+              spacing="40.0">
+            <HBox.margin>
+                <Insets left="15.0"/>
+            </HBox.margin>
+            <Pane fx:id="panePedro2" prefHeight="145.0"
+                  prefWidth="145.0"/>
+            <Pane fx:id="panePedro1" prefHeight="145.0"
+                  prefWidth="145.0"/>
+        </VBox>
+    </HBox>
+    <HBox prefHeight="90.0" prefWidth="1080.0" spacing="5.45"
+          AnchorPane.bottomAnchor="0.0">
+        <Button fx:id="buttonUp1" mnemonicParsing="false"
+                prefHeight="90.0" prefWidth="85.0" text="1 Up"/>
+        <Button fx:id="buttonUp2" layoutX="10.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Up"/>
+        <Button fx:id="buttonUp3" layoutX="62.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Up"/>
+        <Button fx:id="buttonRight1" layoutX="114.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="1 Right"/>
+        <Button fx:id="buttonRight2" layoutX="166.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Right"/>
+        <Button fx:id="buttonRight3" layoutX="218.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Right"/>
+        <Button fx:id="buttonDown1" layoutX="270.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="1 Down"/>
+        <Button fx:id="buttonDown2" layoutX="322.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Down"/>
+        <Button fx:id="buttonDown3" layoutX="374.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Down"/>
+        <Button fx:id="buttonLeft1" layoutX="426.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="1 Left"/>
+        <Button fx:id="buttonLeft2" layoutX="478.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="2 Left"/>
+        <Button fx:id="buttonLeft3" layoutX="530.0" layoutY="10.0"
+                mnemonicParsing="false" prefHeight="90.0"
+                prefWidth="85.0" text="3 Left"/>
+    </HBox>
+</AnchorPane>

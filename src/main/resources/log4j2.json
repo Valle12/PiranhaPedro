@@ -1,0 +1,33 @@
+{
+  "configuration": {
+    "appenders": {
+      "Console": {
+        "name": "console",
+        "PatternLayout": {
+          "pattern": "%d [%t] %-5p %c - %m%n"
+        }
+      },
+      "File": {
+        "name": "file",
+        "filename": "target/logs/logging.log",
+        "PatternLayout": {
+          "pattern": "%d{dd.MM.yyyy HH:mm:ss} %-5p %c:%L - %m%n"
+        }
+      }
+    },
+    "loggers": {
+      "root": {
+        "level": "debug",
+        "appenderref": {
+          "ref": "file"
+        }
+      },
+      "logger": {
+        "name": "de",
+        "appenderref": {
+          "ref": "console"
+        }
+      }
+    }
+  }
+}
