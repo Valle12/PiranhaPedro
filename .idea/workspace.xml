@@ -4,11 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee94ca6-ae28-475d-b7d6-73eba28168b1" name="Changes" comment="buttons are clickable&#10;active player is updated&#10;board is now filled with content">
+    <list default="true" id="2ee94ca6-ae28-475d-b7d6-73eba28168b1" name="Changes" comment="updated .gitignore to exclude sonarlint folder">
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/DebugController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/game/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/listeners/ActivePlayerChangeListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/listeners/CellUpdateListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/listeners/PlayerIntegerUpdateListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/views/debugView.fxml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/controllers/GameControllerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Launcher.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Launcher.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/1/71d70b9d713cee7e86af45c29a2674c20c3faa31" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/0/f0c903a0972830bd8941c7a1d51b6f2f747fc144" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/f/ff9a64911f01208f1b2d9e6d7beed2866cd604b0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/7/1/71d70b9d713cee7e86af45c29a2674c20c3faa31" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/f/0/f0c903a0972830bd8941c7a1d51b6f2f747fc144" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/f/f/ff9a64911f01208f1b2d9e6d7beed2866cd604b0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/ControllerLibrary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/ControllerLibrary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/game/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/game/Cell.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/listeners/ActivePlayerListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/listeners/BoardListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/listeners/GameListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/misc/CellState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/misc/Cell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/misc/Turn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/misc/Turn.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,12 +47,12 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="module-info" />
-        <option value="FxmlFile" />
         <option value="JavaFXApplication" />
-        <option value="Class" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="JUnit5 Test Class" />
+        <option value="FxmlFile" />
+        <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -43,6 +71,9 @@
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2NkTcCczgfijz7dMGCBXD2tjFrv" />
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
@@ -52,22 +83,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "basic__UI__integration",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Valentin/Downloads/Test",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.5505747",
-    "settings.editor.selected.configurable": "actions.on.save"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;basic__UI__integration&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Valentin/Downloads/Test&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.5505747&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Valentin\IdeaProjects\PiranhaPedro\src\main\java" />
@@ -102,6 +133,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.Launcher">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
+      <module name="PiranhaPedro" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="GameControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PiranhaPedro" />
       <extension name="coverage">
@@ -113,22 +157,6 @@
       <option name="PACKAGE_NAME" value="controllers" />
       <option name="MAIN_CLASS_NAME" value="controllers.GameControllerTest" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GameControllerTest.changeActivePlayerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PiranhaPedro" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="controllers.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="controllers" />
-      <option name="MAIN_CLASS_NAME" value="controllers.GameControllerTest" />
-      <option name="METHOD_NAME" value="changeActivePlayerTest" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -179,6 +207,7 @@
         <option name="myRunnerSettings" />
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
+            <option name="cmdOptions" />
             <option name="profiles">
               <set />
             </option>
@@ -191,6 +220,9 @@
             <option name="profilesMap">
               <map />
             </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
             <option name="resolveToWorkspace" value="false" />
             <option name="workingDirPath" value="$PROJECT_DIR$" />
           </MavenRunnerParameters>
@@ -200,9 +232,9 @@
     </configuration>
     <list>
       <item itemvalue="Application.Launcher" />
+      <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.java in PiranhaPedro" />
       <item itemvalue="JUnit.GameControllerTest" />
-      <item itemvalue="JUnit.GameControllerTest.changeActivePlayerTest" />
       <item itemvalue="JUnit.GameControllerTest.changeActivePlayerTest1" />
       <item itemvalue="JUnit.GameControllerTest.testMethodTest1" />
       <item itemvalue="Maven.PiranhaPedro [javafx:run]" />
@@ -210,10 +242,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.java in PiranhaPedro" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.GameControllerTest" />
         <item itemvalue="JUnit.GameControllerTest.changeActivePlayerTest1" />
         <item itemvalue="JUnit.GameControllerTest.testMethodTest1" />
-        <item itemvalue="JUnit.GameControllerTest.changeActivePlayerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -257,7 +289,23 @@
       <option name="project" value="LOCAL" />
       <updated>1685798616004</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="remove .idea folder from .gitignore">
+      <option name="closed" value="true" />
+      <created>1687558882012</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1687558882012</updated>
+    </task>
+    <task id="LOCAL-00006" summary="updated .gitignore to exclude sonarlint folder">
+      <option name="closed" value="true" />
+      <created>1693508977716</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1693508977716</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -268,7 +316,9 @@
     <MESSAGE value="Brand new start" />
     <MESSAGE value="first visual prototype&#10;not functional yet" />
     <MESSAGE value="buttons are clickable&#10;active player is updated&#10;board is now filled with content" />
-    <option name="LAST_COMMIT_MESSAGE" value="buttons are clickable&#10;active player is updated&#10;board is now filled with content" />
+    <MESSAGE value="remove .idea folder from .gitignore" />
+    <MESSAGE value="updated .gitignore to exclude sonarlint folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated .gitignore to exclude sonarlint folder" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
